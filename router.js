@@ -20,7 +20,7 @@ function init() {
     handle["/deleteTA"] = admin.deleteTA;
     handle["/refreshTA"]= admin.refreshTA;
     handle["/log_que"] = admin.log;
-    handle["TAinfo"] = admin.TAinfo;    
+    handle["/TAinfo"] = admin.TAinfo;        
     console.log("Router inited.");
 }
 
