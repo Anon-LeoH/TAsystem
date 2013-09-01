@@ -1,25 +1,26 @@
 var path = require("path");
 var fs = require("fs");
-var userpage = require("./userpage");
+var page = require("./page");
 var preload = require("./preload");
 var url = require("url");
 var admin = require("./admin");
-var sign = require("./sign");
+var sign = require("./sign_in");
 var fileserver = require("./fileserver");
 var handle = {};
 var count = 0;
 
 function init() {
-    handle["/"] = userpage.index;
-    handle["/home"] = userpage.index;
-    handle["/mgzlist"] = userpage.mgzlist;
-    handle["/flashprv"] = preload.flash;
-    handle["/comingsoon"] = userpage.comingsoon;
-    handle["/aboutus"] = userpage.aboutus;
-    handle["/admin"] = admin.index;
+    handle["/"] = page.index;
+    handle["/home"] = page.index;
+    handle["/chginfo"] = work.chginfo;
+    handle["/workstart"] = work.start;
+    handle["/workend"] = work.end;
     handle["/login"] = sign.login;
-    handle["/addmgz"] = admin.addmgz;
-    handle["/deletemgz"] = admin.deletemgz;    
+    handle["/addTA"] = admin.addTA;
+    handle["/deleteTA"] = admin.deleteTA;
+    handle["/refreshTA"]= admin.refreshTA;
+    handle["/log_que"] = admin.log;
+    handle["TAinfo"] = admin.TAinfo;    
     console.log("Router inited.");
 }
 
