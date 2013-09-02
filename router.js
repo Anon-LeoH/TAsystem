@@ -12,10 +12,12 @@ var count = 0;
 function init() {
     handle["/"] = page.index;
     handle["/home"] = page.index;
+    handle["/infoPage"] = page.info;
     handle["/chginfo"] = work.chginfo;
     handle["/workstart"] = work.start;
     handle["/workend"] = work.end;
     handle["/login"] = sign.login;
+    handle["/admin"] = admin.index;
     handle["/addTA"] = admin.addTA;
     handle["/deleteTA"] = admin.deleteTA;
     handle["/refreshTA"]= admin.refreshTA;

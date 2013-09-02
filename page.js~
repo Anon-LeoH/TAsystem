@@ -1,0 +1,59 @@
+var mongodb = require("mongodb");
+var fs = require("fs")
+var path = require("path");
+var url = require("url");
+var querystring = require("querystring");
+var db = require("./dbopt");
+var pre = require("./preload");
+
+
+
+function index(response,query){
+    pre.load("index","-1",function(err,file){
+    response.writeHead(200, {"Content-Type": "text/html"});
+    response.write(file, "utf-8");
+    response.end();
+    });
+}
+
+function mgzlist(response,query){
+    if(!query)
+    {
+        pre.load("mgzlist","-1",function(err,file){
+        response.writeHead(200, {"Content-Type": "text/html"});
+        response.write(file, "utf-8");
+        response.end();
+        });
+    }
+    else
+    {
+        var que = querystring.parse(query);
+        pre.load("mgzlist",que['year'],function(err,file){
+        response.writeHead(200, {"Content-Type": "text/html"});
+        response.write(file, "utf-8");
+        response.end();
+        });    
+    }
+}
+
+function comingsoon(response,query){
+    fs.readFile("./resourse/comingsoon.html","utf-8",function(err,file){
+        response.writeHead(200, {"Content-Type": "text/html"});
+        response.write(file, "utf-8");
+        response.end();
+    });
+}
+
+function aboutus(response,query){
+    fs.readFile("./resourse/aboutus.html","utf-8",function(err,file){
+        response.writeHead(200, {"Content-Type": "text/html"});
+        response.write(file, "utf-8");
+        response.end();
+    });
+}
+
+exports.mgzlist=mgzlist;
+exports.index=index;
+exports.comingsoon = comingsoon;
+exports.aboutus=aboutus;
+
