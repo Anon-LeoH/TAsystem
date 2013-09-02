@@ -26,17 +26,8 @@ function init() {
 
 function route(request,response) {
     pathname = url.parse(request.url).pathname;
-    query = url.parse(request.url).query;
-    var Cookies = {};
-	request.headers.cookie && request.headers.cookie.split(';').forEach(function(Cookie) {
-	    var parts = Cookie.split('=');
-	    Cookies[parts[0].trim()] = (parts[1]||'').trim();
-	});
     if (typeof handle[pathname] === 'function') {
-        if(pathname == "/login" || pathname == "/addmgz")
-            handle[pathname](request,response,Cookies);
-        else
-	    handle[pathname](response,query,Cookies);
+            handle[pathname](request,response);
     }
     else{
         fileserver.handle(pathname,response);
