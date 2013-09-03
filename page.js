@@ -21,7 +21,7 @@ function index(req,res){
             res.end();
         });
     }
-    else login_check(Cookies['sid'],Cookies['psw'],function(rlt){
+    else db.login_check(Cookies['sid'],Cookies['psw'],function(rlt){
         if (rlt){
             pre.load("workPage",{Cookies['sid']},function(err,file){
                 res.writeHead(200, {"Content-Type": "text/html"});
@@ -52,7 +52,7 @@ function info(req,res){
             res.end();
         });
     }
-    else login_check(Cookies['sid'],Cookies['psw'],function(rlt){
+    else db.login_check(Cookies['sid'],Cookies['psw'],function(rlt){
         if (rlt){
             pre.load("infoPage",{Cookies['sid']},function(err,file){
                 res.writeHead(200, {"Content-Type": "text/html"});

@@ -21,7 +21,7 @@ function index(req,res){
             res.end();
         });
     }
-    else login_check(Cookies['sid'],Cookies['psw'],function(rlt){
+    else db.login_check(Cookies['sid'],Cookies['psw'],function(rlt){
 			if (rlt == 2){
             pre.load("adminPage",{sid : Cookies['sid']},function(err,file){
                 res.writeHead(200, {"Content-Type": "text/html"});
@@ -59,7 +59,7 @@ function log(req,res){
             res.end();
         });
     }
-    else login_check(Cookies['sid'],Cookies['psw'],function(rlt){
+    else db.login_check(Cookies['sid'],Cookies['psw'],function(rlt){
         if (rlt == 2){
 		    query = url.parse(request.url).query;
 			var que = querystring.parse(query);
@@ -101,7 +101,7 @@ function TAinfo(req,res){
             res.end();
         });
     }
-    else login_check(Cookies['sid'],Cookies['psw'],function(rlt){
+    else db.login_check(Cookies['sid'],Cookies['psw'],function(rlt){
 			if (rlt == 2){
                 pre.load("UManagePage",{},function(err,file){
                     res.writeHead(200, {"Content-Type": "text/html"});
@@ -139,11 +139,11 @@ function addTA(req,res){
             res.end();
         });
     }
-    else login_check(Cookies['sid'],Cookies['psw'],function(rlt){
+    else db.login_check(Cookies['sid'],Cookies['psw'],function(rlt){
 			if (rlt == 2){
 		        query = url.parse(request.url).query;
 			    var que = querystring.parse(query);
-				addUser(que, function(rst){
+				db.addUser(que, function(rst){
 				    if (rst) {
                         pre.load("aUserSuc",{},function(err,file){
                             res.writeHead(200, {"Content-Type": "text/html"});
@@ -177,5 +177,111 @@ function addTA(req,res){
     });
 }
 
+function deleteTA(req,res){
+    var Cookies = {};
+    req.headers.cookie && req.headers.cookie.split(';').forEach(function(Cookie) {
+        var parts = Cookie.split('=');
+	Cookies[parts[0].trim()] = (parts[1]||'').trim();
+    });
+    if (Cookies == {}){
+        pre.load("loginPage",{},function(err,file){
+            res.writeHead(200, {"Content-Type": "text/html"});
+            res.write(file, "utf-8");
+            res.end();
+        });
+    }
+    else db.login_check(Cookies['sid'],Cookies['psw'],function(rlt){
+			if (rlt == 2){
+		        query = url.parse(request.url).query;
+			    var que = querystring.parse(query);
+				db.deleteUser(que, function(rst){
+				    if (rst) {
+                        pre.load("dUserSuc",{},function(err,file){
+                            res.writeHead(200, {"Content-Type": "text/html"});
+                            res.write(file, "utf-8");
+                            res.end();
+                        });
+					}
+					else {
+                        pre.load("dUserFld",{},function(err,file){
+                            res.writeHead(200, {"Content-Type": "text/html"});
+                            res.write(file, "utf-8");
+                            res.end();
+                        });
+					}
+				});
+        }
+		    else if (rlt == 1){
+                pre.load("workPage",{sid : Cookies['sid']},function(err,file){
+                    res.writeHead(200, {"Content-Type": "text/html"});
+                    res.write(file, "utf-8");
+                    res.end();
+                });
+			}
+        else {
+            pre.load("loginPage",{},function(err,file){
+                res.writeHead(200, {"Content-Type": "text/html"});
+                res.write(file, "utf-8");
+                res.end();
+            });
+        }
+    });
+}
+
+function refreshTA(req,res){
+    var Cookies = {};
+    req.headers.cookie && req.headers.cookie.split(';').forEach(function(Cookie) {
+        var parts = Cookie.split('=');
+	Cookies[parts[0].trim()] = (parts[1]||'').trim();
+    });
+    if (Cookies == {}){
+        pre.load("loginPage",{},function(err,file){
+            res.writeHead(200, {"Content-Type": "text/html"});
+            res.write(file, "utf-8");
+            res.end();
+        });
+    }
+    else db.login_check(Cookies['sid'],Cookies['psw'],function(rlt){
+			if (rlt == 2){
+		        query = url.parse(request.url).query;
+			    var que = querystring.parse(query);
+				db.editUser(que, function(rst){
+				    if (rst) {
+                        pre.load("eUserSuc",{},function(err,file){
+                            res.writeHead(200, {"Content-Type": "text/html"});
+                            res.write(file, "utf-8");
+                            res.end();
+                        });
+					}
+					else {
+                        pre.load("eUserFld",{},function(err,file){
+                            res.writeHead(200, {"Content-Type": "text/html"});
+                            res.write(file, "utf-8");
+                            res.end();
+                        });
+					}
+				});
+        }
+		    else if (rlt == 1){
+                pre.load("workPage",{sid : Cookies['sid']},function(err,file){
+                    res.writeHead(200, {"Content-Type": "text/html"});
+                    res.write(file, "utf-8");
+                    res.end();
+                });
+			}
+        else {
+            pre.load("loginPage",{},function(err,file){
+                res.writeHead(200, {"Content-Type": "text/html"});
+                res.write(file, "utf-8");
+                res.end();
+            });
+        }
+    });
+}
+
 exports.index=index;
 exports.log=log;
+exports.TAinfo = TAinfo;
+exports.addTA = addTA;
+exports.deleteTA = deleteTA;
+exports.refreshTA = refreshTA;
