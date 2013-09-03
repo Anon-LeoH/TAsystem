@@ -17,7 +17,7 @@ function init() {
     handle["/workstart"] = work.start;
     handle["/workend"] = work.end;
     handle["/login"] = sign.login;
-	handle["/quit"] = sign.quit;
+    handle["/quit"] = sign.quit;
     handle["/admin"] = admin.index;
     handle["/addTA"] = admin.addTA;
     handle["/deleteTA"] = admin.deleteTA;
