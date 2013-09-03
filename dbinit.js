@@ -9,11 +9,11 @@ var db = new mongodb.Db(DB_NAME,server,{safe:true});
 db.open(function(err,db){
     if (!err){  
         console.log('Connecting DataBase succeed'); //db链接成功
-	db.createCollection("users",function(err,collection){  //建立用户信息的collection
+    db.createCollection("users",function(err,collection){  //建立用户信息的collection
             if (err)
-		console.log("error:" + err);  //报错
+        console.log("error:" + err);  //报错
             else {
-		console.log("collection DB.TAsys.users created."); 
+        console.log("collection DB.TAsys.users created."); 
                 collection.insert({"sid":"10000001",
                                    "name":"管理员",
                                    "psw":"root123456",
@@ -33,9 +33,9 @@ db.open(function(err,db){
         });
         db.createCollection("logs",function(err,collection){  //建立值班日志的collection
             if (err)
-		console.log("error:" + err);  //报错
+        console.log("error:" + err);  //报错
             else {
-		console.log("collection DB.TAsys.logs created.");
+        console.log("collection DB.TAsys.logs created.");
                 collection.insert({"date":"2013-3-15",
                                    "std":"10000001",
                                    "cls":"B401",

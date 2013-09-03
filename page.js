@@ -12,7 +12,7 @@ function index(req,res){
     var Cookies = {};
     req.headers.cookie && req.headers.cookie.split(';').forEach(function(Cookie) {
         var parts = Cookie.split('=');
-	Cookies[parts[0].trim()] = (parts[1]||'').trim();
+    Cookies[parts[0].trim()] = (parts[1]||'').trim();
     });
     if (Cookies == {}){
         pre.load("loginPage",{},function(err,file){
@@ -43,7 +43,7 @@ function info(req,res){
     var Cookies = {};
     req.headers.cookie && req.headers.cookie.split(';').forEach(function(Cookie) {
         var parts = Cookie.split('=');
-	Cookies[parts[0].trim()] = (parts[1]||'').trim();
+    Cookies[parts[0].trim()] = (parts[1]||'').trim();
     });
     if (Cookies == {}){
         pre.load("loginPage",{},function(err,file){

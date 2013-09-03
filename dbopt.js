@@ -8,10 +8,10 @@ var db = new mongodb.Db(DB_NAME,server,{safe:true});
 
 function startdb() {
     db.open(function(err,db){
-	if(!err)
+    if(!err)
             console.log("DB Connected.");
-	else
-	    console.log(err);
+    else
+        console.log(err);
     });
 };
 
@@ -19,17 +19,21 @@ function login_check(sid,psw,callback){
      db.collection("users",function(err,collection) {
         if (err) console.log("error when open collection" + err)
         else collection.findOne({'sid': sid, 'psw': psw, },function(err,res){
-	    if (err) console.log("Find user error");
-	    else if (res == null) callback(0);
-            else callback(1);
-	});
+        if (err) {
+            console.log("Find user error");
+            callback(0);
+        }
+        else if (res == null) callback(0);
+        else if (res['group'] == admin)callback(2);
+        else callback(1);
+    });
     });
 }
 
 function addLog(log,callback){
     db.collection("logs",function(err,collection) {
         if (err) console.log("error when open collection:" + err);
-	collection.insert({"id"     :log['id']
+    collection.insert({"id"     :log['id']
                            "date"   :log['date'],
                            "std"    :log['std'],
                            "cls"    :log['cls'],
@@ -44,14 +48,14 @@ function addLog(log,callback){
                                    callback(0);
                                }
                            }
-	});
+    });
     });
 }
 
 function addUser(user,callback){
     db.collection("users",function(err,collection) {
         if (err) console.log("error when open collection:" + err);
-	collection.insert({"name" :user['name'],
+    collection.insert({"name" :user['name'],
                            "psw"  :user['psw'],
                            "group":user['group'],
                            "major":user['major'],
@@ -64,7 +68,7 @@ function addUser(user,callback){
                                    callback(0);
                                }
                            }
-	});
+    });
     });
 }
 
