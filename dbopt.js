@@ -1,6 +1,6 @@
 var DB_HOST = "localhost";
 var DB_PORT = 27017;
-var DB_NAME = "Tasystem";
+var DB_NAME = "TAsys";
 
 var mongodb = require('mongodb');
 var server = new mongodb.Server(DB_HOST,DB_PORT,{auto_reconnect:true});
@@ -33,8 +33,7 @@ function login_check(sid,psw,callback){
 function addLog(log,callback){
     db.collection("logs",function(err,collection) {
         if (err) console.log("error when open collection:" + err);
-    collection.insert({"id"     :log['id']
-                           "date"   :log['date'],
+    collection.insert({    "date"   :log['date'],
                            "std"    :log['std'],
                            "cls"    :log['cls'],
                            "st_time":log['st_time'],
