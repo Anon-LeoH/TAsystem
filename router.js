@@ -13,7 +13,7 @@ function init() {
     handle["/"] = page.index;
     handle["/home"] = page.index;
     handle["/infoPage"] = page.info;
-    handle["/chginfo"] = work.chginfo;
+    handle["/chginfo"] = work.chgInfo;
     handle["/workstart"] = work.start;
     handle["/workend"] = work.end;
     handle["/login"] = sign.login;

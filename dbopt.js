@@ -54,7 +54,7 @@ function addLog(log,callback){
 function addUser(user,callback){
     db.collection("users",function(err,collection) {
         if (err) console.log("error when open collection:" + err);
-    collection.insert({"name" :user['name'],
+    collection.insert({    "name" :user['name'],
                            "psw"  :user['psw'],
                            "group":user['group'],
                            "major":user['major'],
@@ -81,8 +81,26 @@ function deleteUser(sid,callback){
     });
 }
 
+function editUser(info,callback){
+    db.collection("users",function(err,collection) {
+	    if (err) {
+			console.log("error when open collection:" + err);
+			callback(0);
+		}
+		collection.update({'sid' : info['sid']},
+			               $set : { "psw"  : info['psw'],
+                                    "major": info['major'],
+                                    "phone": info['phone'],
+                                    "email": info['email'],},
+						          }
+		);
+		callback(1);
+	});
+}
+
 exports.startdb=startdb;
 exports.login_check = login_check;
 exports.addUser = addUser;
 exports.addLog = addLog;
 exports.deleteUser = deleteUser;
+exports.editUser = editUser;
