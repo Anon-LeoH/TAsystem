@@ -46,7 +46,7 @@ function info(req,res) {
         Cookies[parts[0].trim()] = (parts[1]||'').trim();
     });
     if (Cookies == {}) {
-        pre.load("loginPage",{},function(err,file){
+        pre.load("loginPage",{'info' : "login first"},function(err,file){
             res.writeHead(200, {"Content-Type": "text/html"});
             res.write(file, "utf-8");
             res.end();
@@ -60,7 +60,7 @@ function info(req,res) {
                       res.end();
                   });
               } else {
-                    pre.load("loginPage",{},function(err,file){
+                    pre.load("loginPage",{'info' : "login first"},function(err,file){
                         res.writeHead(200, {"Content-Type": "text/html"});
                         res.write(file, "utf-8");
                         res.end();
@@ -71,4 +71,4 @@ function info(req,res) {
 }  
 
 exports.index=index;
-exports.info=info;
+exports.info=info;r

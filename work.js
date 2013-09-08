@@ -101,7 +101,7 @@ function chgInfo(rep,res){
 			Cookies[parts[0].trim()] = (parts[1]||'').trim();
 		});
 		if (Cookies == {}){
-		    pre.load("loginPage",{},function(err,file){
+		    pre.load("loginPage",{'info' : "login first"},function(err,file){
 		        res.writeHead(200, {"Content-Type": "text/html"});
 		        res.write(file, "utf-8");
 			    res.end();
@@ -128,7 +128,7 @@ function chgInfo(rep,res){
 				});
 			}
 			else {
-		        pre.load("loginPage",{},function(err,file){
+		        pre.load("loginPage",{'info' : "login first"},function(err,file){
 		            res.writeHead(200, {"Content-Type": "text/html"});
 		            res.write(file, "utf-8");
 			        res.end();

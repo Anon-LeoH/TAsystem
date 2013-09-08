@@ -53,7 +53,7 @@ function log(req,res){
 	Cookies[parts[0].trim()] = (parts[1]||'').trim();
     });
     if (Cookies == {}){
-        pre.load("loginPage",{},function(err,file){
+        pre.load("loginPage",{'info' : "login first"},function(err,file){
             res.writeHead(200, {"Content-Type": "text/html"});
             res.write(file, "utf-8");
             res.end();
@@ -79,7 +79,7 @@ function log(req,res){
 			}
         }
         else {
-            pre.load("loginPage",{},function(err,file){
+            pre.load("loginPage",{'info' : "login first"},function(err,file){
                 res.writeHead(200, {"Content-Type": "text/html"});
                 res.write(file, "utf-8");
                 res.end();
@@ -95,7 +95,7 @@ function TAinfo(req,res){
 	Cookies[parts[0].trim()] = (parts[1]||'').trim();
     });
     if (Cookies == {}){
-        pre.load("loginPage",{},function(err,file){
+        pre.load("loginPage",{'info' : "login first"},function(err,file){
             res.writeHead(200, {"Content-Type": "text/html"});
             res.write(file, "utf-8");
             res.end();
@@ -117,7 +117,7 @@ function TAinfo(req,res){
                 });
 			}
         else {
-            pre.load("loginPage",{},function(err,file){
+            pre.load("loginPage",{'info' : "login first"},function(err,file){
                 res.writeHead(200, {"Content-Type": "text/html"});
                 res.write(file, "utf-8");
                 res.end();
@@ -133,7 +133,7 @@ function addTA(req,res){
 	Cookies[parts[0].trim()] = (parts[1]||'').trim();
     });
     if (Cookies == {}){
-        pre.load("loginPage",{},function(err,file){
+        pre.load("loginPage",{'info' : "login first"},function(err,file){
             res.writeHead(200, {"Content-Type": "text/html"});
             res.write(file, "utf-8");
             res.end();
@@ -168,7 +168,7 @@ function addTA(req,res){
                 });
 			}
         else {
-            pre.load("loginPage",{},function(err,file){
+            pre.load("loginPage",{'info' : "login first"},function(err,file){
                 res.writeHead(200, {"Content-Type": "text/html"});
                 res.write(file, "utf-8");
                 res.end();
@@ -184,7 +184,7 @@ function deleteTA(req,res){
 	Cookies[parts[0].trim()] = (parts[1]||'').trim();
     });
     if (Cookies == {}){
-        pre.load("loginPage",{},function(err,file){
+        pre.load("loginPage",{'info' : "login first"},function(err,file){
             res.writeHead(200, {"Content-Type": "text/html"});
             res.write(file, "utf-8");
             res.end();
@@ -219,7 +219,7 @@ function deleteTA(req,res){
                 });
 			}
         else {
-            pre.load("loginPage",{},function(err,file){
+            pre.load("loginPage",{'info' : "login first"},function(err,file){
                 res.writeHead(200, {"Content-Type": "text/html"});
                 res.write(file, "utf-8");
                 res.end();
@@ -235,7 +235,7 @@ function refreshTA(req,res){
 	Cookies[parts[0].trim()] = (parts[1]||'').trim();
     });
     if (Cookies == {}){
-        pre.load("loginPage",{},function(err,file){
+        pre.load("loginPage",{'info' : "login first"},function(err,file){
             res.writeHead(200, {"Content-Type": "text/html"});
             res.write(file, "utf-8");
             res.end();
@@ -270,7 +270,7 @@ function refreshTA(req,res){
                 });
 			}
         else {
-            pre.load("loginPage",{},function(err,file){
+            pre.load("loginPage",{'info' : "login first"},function(err,file){
                 res.writeHead(200, {"Content-Type": "text/html"});
                 res.write(file, "utf-8");
                 res.end();
