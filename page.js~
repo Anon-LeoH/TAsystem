@@ -71,4 +71,4 @@ function info(req,res) {
 }  
 
 exports.index=index;
-exports.info=info;
+exports.info=info;r

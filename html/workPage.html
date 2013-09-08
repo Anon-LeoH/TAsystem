@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="TAsystem Log In Page">
+    <meta name="author" content="LH">
+	<meta http-equiv="X-UA-Compatible" content="IE=9; IE=8;" />
+    <title>TAsystem工作</title>
+    <link href="../bootstrap/css/bootstrap.css" rel="stylesheet">
+	<link href="../bootstrap/css/bootstrap-theme.css" rel="stylesheet">
+	<link rel="stylesheet" href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css">
+    <link rel="stylesheet" href="../bootstrap/switch/static/stylesheets/bootstrap-switch.css">
+	<link href="../css/workPage.css" rel="stylesheet">
+  </head>
+
+  <body>
+  
+    <div class="header">
+	  <ul class="list-inline">
+	    <li><a href="/home"><img src="../img/logo.png" />img</a></li>
+	    <li><ul class="list-inline">
+	          <li><a href="/home">主页</a></li>
+		      <li><a href="/infoPage">个人信息</a></li>
+	        </ul>
+		</li>
+		<li><h6>欢迎！<a href="/infoPage">WAIT_FOR_STD_REPLACE</a></h6></li>
+	  </ul>
+	</div>
+	
+	<div class="container">
+	  <div class="row">
+	    <div class="col-md-2 col-md-offset-2" id="info">
+		  <h3>您的信息：</h3>
+		  <p>-----------------------</p>
+		  <table class="table">
+		    <tr>
+			  <td style="width:30%;">姓名</td>
+			  <td style="width:70%;">WP_NAME</td>
+			</tr>
+			<!--WAIT_FOR_BASIC_INFO_REPLACE-->
+		  </table>
+		  <a href="/infoPage"><h5>修改信息</h5></a>
+	    </div>
+	    <div class="col-md-6" id="mainContent">
+		  <h3>当前信息</h3>
+		  <p>-----------------------</p>
+		  <table class="table">
+		    <tr>
+			  <td style="width:30%;">当前日期</td>
+			  <td style="width:70%;" id="date">WP_DATE</td>
+			</tr>
+			<tr>
+			  <td style="width:30%;">当前时间</td>
+			  <td style="width:70%;" id="date">WP_TIME</td>
+			</tr>
+			<tr>
+			  <td style="width:30%;">IP位置</td>
+			  <td style="width:70%;" id="date">WP_IP</td>
+			</tr>
+			<tr>
+			  <td style="width:30%;">工作状态</td>
+			  <td style="width:70%;" id="date">WP_STATUS</td>
+			</tr>
+		  </table>
+		  <h3>工作区</h3>
+		  <p>=======================</p>
+		  <div class="btn-area">
+			<label class="label-change-switch">
+		      <div id="workBotton" class="label-toggle-switch make-switch switch-large"
+			  data-on="default" data-off="success" data-on-label="结束" data-off-label="开始">
+                <input type="checkbox" checked>
+              </div>
+			</label>
+			<h4>值班时间：</h4>
+			<h4>00:00:00</h4>
+			<p>----------------------------------</p>
+			<p class="intro">值班时间在上传服务端时会以四舍五入的方式取整上传</p>
+		  </div>
+		</div>
+	    <div class="col-md-2" id="placeHolder">
+	    </div>
+	  </div>
+	</div>
+
+    <script type="text/javascript" src="http://code.jquery.com/jquery-latest.js"></script>	
+	<script type="text/javascript" src="../bootstrap/js/bootstrap.min.js" ></script>
+	<script type="text/javascript" src="../js/workPage.js" ></script>
+    <script type="text/javascript" src="../bootstrap/switch/static/js/bootstrap-switch.js"></script>
+	
+  </body>
+</html>
