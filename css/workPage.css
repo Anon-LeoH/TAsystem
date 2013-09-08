@@ -1,0 +1,36 @@
+div.header{
+    height:40px;
+	background-color:#000000;
+	color:#feeeed;
+	position:fixed;
+	top:0;
+    min-width:1000px;
+}
+
+li#l1{
+    width:10%;
+}
+li#l2{
+    width:20%;
+}
+li#l3{
+    width:65%;
+    text-align:right;
+}
+
+div#info{
+    display:inline-block;
+}
+
+h4{
+    display:inline-block;
+    margin-left:30px;
+}
+
+h4#time{
+    color:green;
+}
+
+div#label2-toggle-switch{
+    display:inline-block;
+}

@@ -83,19 +83,19 @@ function deleteUser(sid,callback){
 
 function editUser(info,callback){
     db.collection("users",function(err,collection) {
-	    if (err) {
-			console.log("error when open collection:" + err);
-			callback(0);
-		}
-		collection.update({'sid' : info['sid']},
-			               $set : { "psw"  : info['psw'],
+        if (err) {
+            console.log("error when open collection:" + err);
+            callback(0);
+        }
+        collection.update({'sid' : info['sid']},
+                           $set : { "psw"  : info['psw'],
                                     "major": info['major'],
                                     "phone": info['phone'],
                                     "email": info['email'],},
-						          }
-		);
-		callback(1);
-	});
+                                  }
+        );
+        callback(1);
+    });
 }
 
 exports.startdb=startdb;
