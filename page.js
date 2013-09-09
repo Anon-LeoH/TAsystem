@@ -23,7 +23,7 @@ function index(req, res) {
     } else {
           db.login_check(Cookies['sid'],Cookies['psw'],function(rlt) {
               if (rlt) {
-                  pre.load("workPage",{Cookies['sid']},function(err,file){
+                  pre.load("workPage",{"sid" : Cookies['sid']},function(err,file){
                       res.writeHead(200, {"Content-Type": "text/html"});
                       res.write(file, "utf-8");
                       res.end();
@@ -54,7 +54,7 @@ function info(req,res) {
     } else {
           db.login_check(Cookies['sid'],Cookies['psw'],function(rlt) {
               if (rlt) {
-                  pre.load("infoPage",{Cookies['sid']},function(err,file){
+                  pre.load("infoPage",{"sid" : Cookies['sid']},function(err,file){
                       res.writeHead(200, {"Content-Type": "text/html"});
                       res.write(file, "utf-8");
                       res.end();

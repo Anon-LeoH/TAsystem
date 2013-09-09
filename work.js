@@ -114,14 +114,14 @@ function chgInfo(rep,res){
                 var info = getInfo(req);
                 db.editUser(info,function(rst){
                     if (rst){
-                        pre.load("eUserSuc",{},function(err,file){
+                        pre.load("Suc",{},function(err,file){
                             res.writeHead(200, {"Content-Type": "text/html"});
                             res.write(file, "utf-8");
                             res.end();
                         });
                     }
                     else {
-                        pre.load("eUserFld",{},function(err,file){
+                        pre.load("Fld",{},function(err,file){
                             res.writeHead(200, {"Content-Type": "text/html"});
                             res.write(file, "utf-8");
                             res.end();

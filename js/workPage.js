@@ -15,17 +15,17 @@ var se, m = 0, h = 0, s = 0, ss = 1;
   
 function second(){  
     if((ss%200)==0){
-	    s += 1;
-		ss = 1;
-	}  
+        s += 1;
+        ss = 1;
+    }  
     if(s>0 && (s%60)==0){
-	    m += 1;
-		s = 0;
-	}  
+        m += 1;
+        s = 0;
+    }  
     if(m>0 && (m%60)==0){
-	    h += 1;
-		m = 0;
-	}  
+        h += 1;
+        m = 0;
+    }  
     t = h + ":" + m + ":" + s;  
     $("#time").replaceWith("<h4 id='time'>" + t + "</h4>");  
     ss+=1;  
@@ -92,63 +92,63 @@ var action = {
 
 $(document).ready(function(){
     _init_();
-	var now_date = new Date();
-	$("#date").replaceWith("<td style='width:70%;' id='date'>" + now_date.toLocaleDateString() + "</td>");
-	$("#now-time").replaceWith("<td style='width:70%;' id='now-time'>" + now_date.toLocaleTimeString() + "</td>");
+    var now_date = new Date();
+    $("#date").replaceWith("<td style='width:70%;' id='date'>" + now_date.toLocaleDateString() + "</td>");
+    $("#now-time").replaceWith("<td style='width:70%;' id='now-time'>" + now_date.toLocaleTimeString() + "</td>");
     $('#str-btn').on('click', function(e, data) {
         var tmp = action["start"]();
-		if (tmp) {
-		    startclock();
-			startTime = new Date();
-			$("#status").replaceWith("<td style='width:70%;color:green;' id='status'>已开始</td>");
-		}
+        if (tmp) {
+            startclock();
+            startTime = new Date();
+            $("#status").replaceWith("<td style='width:70%;color:green;' id='status'>已开始</td>");
+        }
     });
     $('#end-btn').on('click', function(e, data) {    
-	    if (check_code == "") {
-		    alert("工作还未开始！请先点击开始工作！");
-			return;
-		}
+        if (check_code == "") {
+            alert("工作还未开始！请先点击开始工作！");
+            return;
+        }
         $('#myModal').modal('toggle');
-		$('#myModal').on('hide.bs.modal',function(){
-		    var data = {};
-			texts = $(":textarea",$('myModal'));
-			selects = $(":select",$('myModal'));
-			for(i = 0; i < texts.length; i++){
-			    data[texts[i].attr("name")] = texts[i].attr("value");
-			}
-			for(i = 0; i < selects.length; i++){
-			    data[selects[i].attr("name")] = selects[i].attr("value");
-			}
-			if (data['cls'] == ""){
-				alert("结束工作失败，请填写好工作日志！");
-				return;
-			}
-			else {
-			    endTime = new Date();
-				data["st_time"] = startTime;
-				data["ed_time"] = endTime;
-				data["std"] = sid;
-				data["date"] = endTime.toLocaleDateString();
-				var sh = startTime.getHours();
-				var sm = startTime.getMinutes();
-				var eh = endTime.getHours();
-				var em = endTime.getMinutes();
-				var hour = eh - sh;
-				if (em - sm >= 40) hour ++;
-				else if (em - sm < -20) hour --;
-				data["hour"] = hour;
-			}
-			var tmp = action["end"](data);
-			if (tmp) {
-			    check_code = "";
-				stopclock();
-				$("#time").replaceWith("<h4 id='time'>0:0:0</h4>");  	
-                $("#status").replaceWith("<td style='width:70%;' id='status'>未开始</td>");				
-			}
-			else {
-			    alert("结束工作失败，请再次尝试！");
-			}
-		});
+        $('#myModal').on('hide.bs.modal',function(){
+            var data = {};
+            texts = $(":textarea",$('myModal'));
+            selects = $(":select",$('myModal'));
+            for(i = 0; i < texts.length; i++){
+                data[texts[i].attr("name")] = texts[i].attr("value");
+            }
+            for(i = 0; i < selects.length; i++){
+                data[selects[i].attr("name")] = selects[i].attr("value");
+            }
+            if (data['cls'] == ""){
+                alert("结束工作失败，请填写好工作日志！");
+                return;
+            }
+            else {
+                endTime = new Date();
+                data["st_time"] = startTime;
+                data["ed_time"] = endTime;
+                data["std"] = sid;
+                data["date"] = endTime.toLocaleDateString();
+                var sh = startTime.getHours();
+                var sm = startTime.getMinutes();
+                var eh = endTime.getHours();
+                var em = endTime.getMinutes();
+                var hour = eh - sh;
+                if (em - sm >= 40) hour ++;
+                else if (em - sm < -20) hour --;
+                data["hour"] = hour;
+            }
+            var tmp = action["end"](data);
+            if (tmp) {
+                check_code = "";
+                stopclock();
+                $("#time").replaceWith("<h4 id='time'>0:0:0</h4>");      
+                $("#status").replaceWith("<td style='width:70%;' id='status'>未开始</td>");                
+            }
+            else {
+                alert("结束工作失败，请再次尝试！");
+            }
+        });
     });
 });
 

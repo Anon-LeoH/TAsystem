@@ -55,7 +55,7 @@ function addUser(user,callback){
     db.collection("users",function(err,collection) {
         if (err) console.log("error when open collection:" + err);
     collection.insert({    "sid"  :user['sid'],
-	                       "name" :user['name'],
+                           "name" :user['name'],
                            "psw"  :user['psw'],
                            "group":user['group'],
                            "major":user['major'],
@@ -99,9 +99,37 @@ function editUser(info,callback){
     });
 }
 
+function getUserInfo(sid,callback){
+     db.collection("users",function(err,collection) {
+        if (err) console.log("error when open collection" + err)
+        else collection.findOne({'sid': sid, },function(err,res){
+        if (err) {
+            console.log("Find user error");
+            callback(0,{});
+        }
+        else if (res == null) callback(0,{});
+        else {
+            callback(1,res);
+        }
+    });
+    });
+}
+
+function getAllInfo(callback){
+    db.collection("users",function(err,collection) {
+        if (err) console.log("error when open collection" + err);
+	collection.find().toArray(function(err,res){
+            callback(1,res)
+	});
+    });
+}
+
 exports.startdb=startdb;
 exports.login_check = login_check;
 exports.addUser = addUser;
 exports.addLog = addLog;
 exports.deleteUser = deleteUser;
 exports.editUser = editUser;
+exports.getUserInfo = getUserInfo;
+exports.getAllInfo = getAllInfo;
+

@@ -9,7 +9,7 @@ function _init_() {
 
 $(document).ready(function(){
     _init_();
-	$('#add-btn').on('click', function(e, data) {
-	    $('#myModal').modal('toggle');
-	});
+    $('#add-btn').on('click', function(e, data) {
+        $('#myModal').modal('toggle');
+    });
 });

@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="TAsystem Log In Page">
+    <meta name="author" content="LH">
+    <meta http-equiv="X-UA-Compatible" content="IE=9; IE=8;" />
+    <title>TAsystem工作</title>
+    <link href="./bootstrap/css/bootstrap.css" rel="stylesheet">
+    <link href="./bootstrap/css/bootstrap-theme.css" rel="stylesheet">
+    <link rel="stylesheet" href="./bootstrap/switch/static/stylesheets/bootstrap-switch.css">
+    <link href="./css/workPage.css" rel="stylesheet">
+  </head>
+
+  <body>
+  
+    <div class="header">
+      <ul class="list-inline">
+        <li id="l1"><a href="/home"><img src="./img/logo.png" />img</a></li>
+        <li id="l2">
+            <ul class="list-inline">
+              <li><a href="/home">主页</a></li>
+              <li><a href="/infoPage">个人信息</a></li>
+            </ul>
+        </li>
+        <li id="l3"><h6>欢迎！<a href="/infoPage?sid=WAIT_FOR_SID_REPLACE">WAIT_FOR_SID_REPLACE</a></h6></li>
+      </ul>
+    </div>
+    
+    <div class="container" style="margin-top:60px;">
+      <div class="row">
+        <div class="col-md-3 col-md-offset-1" id="info">
+          <div class="well">
+            <h3>您的信息：</h3>
+            <p>-----------------------</p>
+            <table class="table">
+              WAIT_FOR_BASIC_INFO_REPLACE
+            </table>
+            <a href="/infoPage?sid=WAIT_FOR_SID_REPLACE"><h5>修改信息</h5></a>
+          </div>
+        </div>
+        <div class="col-md-6" id="mainContent">
+          <h3>当前信息</h3>
+          <p>-----------------------</p>
+          <table class="table">
+            <tr>
+              <td style="width:30%;">当前日期</td>
+              <td style="width:70%;" id="date">点击"开始"刷新</td>
+            </tr>
+            <tr>
+              <td style="width:30%;">登陆时间</td>
+              <td style="width:70%;" id="now-time">点击"开始"刷新</td>
+            </tr>
+            <tr>
+              <td style="width:30%;">用户组别</td>
+              <td style="width:70%;" id="group">助理</td>
+            </tr>
+            <tr>
+              <td style="width:30%;">工作状态</td>
+              <td style="width:70%;" id="status">未开始</td>
+            </tr>
+          </table>
+          <h3>工作区</h3>
+          <p>=======================</p>
+          <div class="btn-area">
+            <button type="button" class="btn btn-success" id="str-btn">开始</button>
+            <button type="button" class="btn btn-default" id="end-btn">结束</button>
+            <h4>值班时间：</h4>
+            <h4 id="time">0:0:0</h4>
+            <p>----------------------------------</p>
+            <p class="intro">值班时间在上传服务端时会以四舍五入的方式取整上传</p>
+          </div>
+        </div>
+        <div class="col-md-2" id="placeHolder">
+        </div>
+      </div>
+    </div>
+
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h4 class="modal-title">助理日志</h4>
+          </div>
+          <div class="modal-body">
+            <form role="form">
+              <div class="form-group">
+                <label for="exampleInputEmail1">Email address</label>
+                <select class="form-control" name="cls" placeholder="请选择实验室">
+                  <option value ="B401">B401</option>
+                  <option value ="B402">B402</option>
+                  <option value ="B403">B403</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="log">工作日志</label>
+                <textarea class="form-control" rows="4" name="log" placeholder="工作日志"></textarea>
+                </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-success" data-dismiss="modal">提交</button>
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /.modal --> 
+
+
+
+    <script type="text/javascript" src="http://code.jquery.com/jquery-latest.js"></script>    
+    <script type="text/javascript" src="./bootstrap/js/bootstrap.min.js" ></script>
+    <script type="text/javascript" src="./js/workPage.js" ></script>
+    <script type="text/javascript" src="./bootstrap/switch/static/js/bootstrap-switch.js"></script>
+    
+  </body>
+</html>
