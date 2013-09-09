@@ -54,7 +54,8 @@ function addLog(log,callback){
 function addUser(user,callback){
     db.collection("users",function(err,collection) {
         if (err) console.log("error when open collection:" + err);
-    collection.insert({    "name" :user['name'],
+    collection.insert({    "sid"  :user['sid'],
+	                       "name" :user['name'],
                            "psw"  :user['psw'],
                            "group":user['group'],
                            "major":user['major'],

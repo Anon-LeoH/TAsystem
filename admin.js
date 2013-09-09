@@ -103,7 +103,9 @@ function TAinfo(req,res){
     }
     else db.login_check(Cookies['sid'],Cookies['psw'],function(rlt){
             if (rlt == 2){
-                pre.load("UManagePage",{},function(err,file){
+			    query = url.parse(request.url).query;
+                var que = querystring.parse(query);
+                pre.load("UManagePage",{"sid" : que["sid"]},function(err,file){
                     res.writeHead(200, {"Content-Type": "text/html"});
                     res.write(file, "utf-8");
                     res.end();
@@ -141,8 +143,7 @@ function addTA(req,res){
     }
     else db.login_check(Cookies['sid'],Cookies['psw'],function(rlt){
             if (rlt == 2){
-                query = url.parse(request.url).query;
-                var que = querystring.parse(query);
+                var que = getInfo(req);
                 db.addUser(que, function(rst){
                     if (rst) {
                         pre.load("aUserSuc",{},function(err,file){
@@ -278,6 +279,16 @@ function refreshTA(req,res){
         }
     });
 }
+
+function getInfo(req){
+    var info ='';  
+    req.addListener('data', function(chunk){  
+        info += chunk;  
+    }).addListener('end', function(){  
+        info = querystring.parse(info);  
+    }); 
+    return info;
+} // wait for change GET to POST
 
 exports.index=index;
 exports.log=log;

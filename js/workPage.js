@@ -97,7 +97,6 @@ $(document).ready(function(){
 	$("#now-time").replaceWith("<td style='width:70%;' id='now-time'>" + now_date.toLocaleTimeString() + "</td>");
     $('#str-btn').on('click', function(e, data) {
         var tmp = action["start"]();
-		startclock();
 		if (tmp) {
 		    startclock();
 			startTime = new Date();

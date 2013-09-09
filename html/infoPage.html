@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="TAsystem Log In Page">
+    <meta name="author" content="LH">
+    <meta http-equiv="X-UA-Compatible" content="IE=9; IE=8;" />
+    <title>个人信息</title>
+    <link href="../bootstrap/css/bootstrap.css" rel="stylesheet">
+    <link href="../bootstrap/css/bootstrap-theme.css" rel="stylesheet">
+    <link rel="stylesheet" href="../bootstrap/switch/static/stylesheets/bootstrap-switch.css">
+    <link href="../css/adminPage.css" rel="stylesheet">
+  </head>
+
+  <body>
+  
+    <div class="header">
+      <ul class="list-inline">
+        <li id="l1"><a href="/home"><img src="../img/logo.png" />img</a></li>
+        <li id="l2">
+            <ul class="list-inline">
+              <li><a href="/home">主页</a></li>
+              <li><a href="/infoPage">个人信息</a></li>
+            </ul>
+        </li>
+        <li id="l3"><h6>欢迎！<a href="/infoPage">WAIT_FOR_STD_REPLACE</a></h6></li>
+      </ul>
+    </div>
+    
+	<div class="row" style="margin-top:60px;">
+	  <div class="col-md-5 col-md-offset-3">
+	    <div class="well">
+          <div class="container">
+	        <h3>个人信息：</h3>
+	        <p>=====================</p>
+	        <form role="form" action="/chgInfo" method="post">
+	          <div class="form-group">
+                <label for="exampleInputSid">学号</label>
+                <input class="form-control" name="sid" type="text" placeholder="请输入学号"/>
+              </div>
+              <div class="form-group">
+               <label for="exampleInputName">姓名</label>
+               <input class="form-control" name="name" type="text" placeholder="请输入姓名"/>
+              </div>
+              <div class="form-group">
+                <label for="exampleInputGroup">用户组</label>
+                <select class="form-control" name="group" placeholder="请选择用户组">
+       	          <option value ="1">助理</option>
+	  	          <option value ="2">管理员</option>
+		        </select>
+              </div>
+	          <div class="form-group">
+                <label for="exampleInputMajor">专业</label>
+                <input class="form-control" name="major" type="text" placeholder="请输入专业"/>
+              </div>
+	          <div class="form-group">
+                <label for="exampleInputPhone">电话</label>
+                <input class="form-control" name="major" type="text" placeholder="请输入电话"/>
+              </div>
+	          <div class="form-group">
+                <label for="exampleInputEmail">Email</label>
+                <input class="form-control" name="email" type="email" placeholder="请输入email"/>
+              </div>
+	          <div class="modal-footer">
+                <button type="submit" class="btn btn-large btn-success">提交</button>
+              </div>
+ 	        </form>
+          </div>
+	    </div>
+	  </div>
+	</div>
+
+    <script type="text/javascript" src="http://code.jquery.com/jquery-latest.js"></script>    
+    <script type="text/javascript" src="../bootstrap/js/bootstrap.min.js" ></script>
+	<script type="text/javascript" src="../js/infoPage.js"></script>
+    <script type="text/javascript" src="../bootstrap/switch/static/js/bootstrap-switch.js"></script>
+    
+  </body>
+</html>
