@@ -13,7 +13,8 @@ db.open(function(err,db){
             if (err)
         console.log("error:" + err);  //报错
             else {
-        console.log("collection DB.TAsys.users created."); 
+        console.log("collection DB.TAsys.users created.");
+	            collection.remove(function(){});	
                 collection.insert({"sid":"10000001",
                                    "name":"管理员",
                                    "psw":"root123456",
@@ -21,6 +22,18 @@ db.open(function(err,db){
                                    "major":"软件学院",
                                    "phone":"10086",
                                    "email":"aaa@bbb.com"}, //初始化test信息
+                                   {safe:true},
+                                   function(err,rec){
+                                       if (err) console.log(err);
+                                   }
+                );
+                collection.insert({"sid":"10000002",
+                                   "name":"普通用户",
+                                   "psw":"user123456",
+                                   "group":"user",
+                                   "major":"软件学院",
+                                   "phone":"10000",
+                                   "email":"ccc@ddd.com"}, //初始化test信息
                                    {safe:true},
                                    function(err,rec){
                                        if (err) console.log(err);
@@ -36,12 +49,13 @@ db.open(function(err,db){
         console.log("error:" + err);  //报错
             else {
         console.log("collection DB.TAsys.logs created.");
+		        collection.remove(function(){});
                 collection.insert({"date":"2013-3-15",
                                    "std":"10000001",
                                    "cls":"B401",
                                    "st_time":new Date(),
-                                   "ed_time":new Date()
-                                   "hour":0.0,
+                                   "ed_time":new Date(),
+                                   "hour":"0.0",
                                    "log":"今天很不高兴",}, //初始化test信息
                                    {safe:true},
                                    function(err,rec){

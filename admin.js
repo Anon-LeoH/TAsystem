@@ -61,7 +61,7 @@ function log(req,res){
     }
     else db.login_check(Cookies['sid'],Cookies['psw'],function(rlt){
         if (rlt == 2){
-            query = url.parse(request.url).query;
+            query = url.parse(req.url).query;
             var que = querystring.parse(query);
             if (que['sid']){
                 pre.load("logPage",{"sid" : que['sid']},function(err,file){
@@ -103,7 +103,7 @@ function TAinfo(req,res){
     }
     else db.login_check(Cookies['sid'],Cookies['psw'],function(rlt){
             if (rlt == 2){
-			    query = url.parse(request.url).query;
+			    query = url.parse(req.url).query;
                 var que = querystring.parse(query);
                 pre.load("infoPage",{"sid" : que["sid"]},function(err,file){
                     res.writeHead(200, {"Content-Type": "text/html"});
@@ -143,7 +143,8 @@ function addTA(req,res){
     }
     else db.login_check(Cookies['sid'],Cookies['psw'],function(rlt){
             if (rlt == 2){
-                var que = getInfo(req);
+                query = url.parse(req.url).query;
+                var que = querystring.parse(query);
                 db.addUser(que, function(rst){
                     if (rst) {
                         pre.load("Suc",{},function(err,file){
@@ -193,9 +194,9 @@ function deleteTA(req,res){
     }
     else db.login_check(Cookies['sid'],Cookies['psw'],function(rlt){
             if (rlt == 2){
-                query = url.parse(request.url).query;
+                query = url.parse(req.url).query;
                 var que = querystring.parse(query);
-                db.deleteUser(que, function(rst){
+                db.deleteUser(que["sid"], function(rst){
                     if (rst) {
                         pre.load("Suc",{},function(err,file){
                             res.writeHead(200, {"Content-Type": "text/html"});
@@ -244,7 +245,7 @@ function refreshTA(req,res){
     }
     else db.login_check(Cookies['sid'],Cookies['psw'],function(rlt){
             if (rlt == 2){
-                query = url.parse(request.url).query;
+                query = url.parse(req.url).query;
                 var que = querystring.parse(query);
                 db.editUser(que, function(rst){
                     if (rst) {
@@ -280,15 +281,6 @@ function refreshTA(req,res){
     });
 }
 
-function getInfo(req){
-    var info ='';  
-    req.addListener('data', function(chunk){  
-        info += chunk;  
-    }).addListener('end', function(){  
-        info = querystring.parse(info);  
-    }); 
-    return info;
-} // wait for change GET to POST
 
 exports.index=index;
 exports.log=log;

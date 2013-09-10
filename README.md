@@ -22,12 +22,22 @@ A system for the sysu lab assistent;
 * admin.js      管理助理以及查看，管理日志等功能
 
 ####如何验证客户端上传数据：
-      为了让这个系统稍微可靠点，每一次客户端工作开始的ajax请求
+  为了让这个系统稍微可靠点，每一次客户端工作开始的ajax请求
   都会触发服务端产生随机钥（16位字符串）并返回。工作结束请求必
   须包含正确的随机钥，否则不能结束工作。
-      必须要实验室IP才能开始/结束工作，否则不予处理。
-	  开始了工作却未正常结束的助理需要联系管理员清空保存的随意
+  必须要实验室IP才能开始/结束工作，否则不予处理。
+  开始了工作却未正常结束的助理需要联系管理员清空保存的随意
   钥，否则将无法开始工作。
   以上
 
+####如何配置环境
+  暂时写ubuntu下如何配置……
+  过两天有时间再加
 
+  安装nodejs        : sudo apt-get install nodejs
+  安装mongodb       : sudo apt-get install mongodb（安装后默认开启）
+  安装npm           : sudo apt-get install npm
+  安装mongodb的js库 : sudo npm install mongodb
+  初始化数据库      : node _%TAsystemdir%_/dbinit.js
+  配置服务器        : node _%TAsystemdir%_/server.js
+  进入页面          : 浏览器输入localhost:8080

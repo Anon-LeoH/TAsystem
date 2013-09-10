@@ -22,8 +22,15 @@ function index(req, res) {
         });
     } else {
           db.login_check(Cookies['sid'],Cookies['psw'],function(rlt) {
-              if (rlt) {
+              if (rlt == 1) {
                   pre.load("workPage",{"sid" : Cookies['sid']},function(err,file){
+                      res.writeHead(200, {"Content-Type": "text/html"});
+                      res.write(file, "utf-8");
+                      res.end();
+                  });
+			  }
+			  else if (rlt == 2) {
+                  pre.load("adminPage",{"sid" : Cookies['sid']},function(err,file){
                       res.writeHead(200, {"Content-Type": "text/html"});
                       res.write(file, "utf-8");
                       res.end();
@@ -54,7 +61,9 @@ function info(req,res) {
     } else {
           db.login_check(Cookies['sid'],Cookies['psw'],function(rlt) {
               if (rlt) {
-                  pre.load("infoPage",{"sid" : Cookies['sid']},function(err,file){
+                  query = url.parse(req.url).query;
+                  var que = querystring.parse(query);
+                  pre.load("infoPage",{"sid" : que['sid']},function(err,file){
                       res.writeHead(200, {"Content-Type": "text/html"});
                       res.write(file, "utf-8");
                       res.end();

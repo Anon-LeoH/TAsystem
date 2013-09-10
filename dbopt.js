@@ -24,7 +24,7 @@ function login_check(sid,psw,callback){
             callback(0);
         }
         else if (res == null) callback(0);
-        else if (res['group'] == admin)callback(2);
+        else if (res['group'] == "admin") callback(2);
         else callback(1);
     });
     });
@@ -46,8 +46,7 @@ function addLog(log,callback){
                                    console.log("error occur when insert:" + err);
                                    callback(0);
                                }
-                           }
-    });
+                           });
     });
 }
 
@@ -67,8 +66,7 @@ function addUser(user,callback){
                                    console.log("error occur when insert:" + err);
                                    callback(0);
                                }
-                           }
-    });
+                           });
     });
 }
 
@@ -76,6 +74,7 @@ function deleteUser(sid,callback){
     db.collection("users",function(err,collection) {
         if (err) console.log("error when open collection:" + err);
         collection.remove({"sid":sid, },function(err,res){
+			console.log("aaaaaa");
             if(!err) callback(1);
             else callback(0);
         });
@@ -89,38 +88,41 @@ function editUser(info,callback){
             callback(0);
         }
         collection.update({'sid' : info['sid']},
-                           $set : { "psw"  : info['psw'],
-                                    "major": info['major'],
-                                    "phone": info['phone'],
-                                    "email": info['email'],},
-                                  }
+                          {
+						      $set : { "name" : info["name"],
+									   "psw"  : info['psw'],
+                                       "major": info['major'],
+                                       "phone": info['phone'],
+                                       "email": info['email'],},
+                                     },
+						  function(err,rlt){}
         );
         callback(1);
     });
 }
 
 function getUserInfo(sid,callback){
-     db.collection("users",function(err,collection) {
-        if (err) console.log("error when open collection" + err)
-        else collection.findOne({'sid': sid, },function(err,res){
-        if (err) {
-            console.log("Find user error");
-            callback(0,{});
-        }
-        else if (res == null) callback(0,{});
-        else {
-            callback(1,res);
-        }
-    });
+    db.collection("users",function(err,collection) {
+        if (err) console.log("error when open collection" + err);
+        collection.findOne({'sid':sid},function(err,res){
+            if (err) {
+                console.log("Find user error");
+                callback(0,{});
+            }
+            else if (res == null) callback(0,{});
+            else {
+                callback(1,res);
+            }
+        });
     });
 }
 
 function getAllInfo(callback){
     db.collection("users",function(err,collection) {
         if (err) console.log("error when open collection" + err);
-	collection.find().toArray(function(err,res){
+    collection.find().toArray(function(err,res){
             callback(1,res)
-	});
+    });
     });
 }
 

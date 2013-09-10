@@ -14,49 +14,53 @@ var MAX_HOUR = 99;
 // （非阻塞要加好多缩进。。。。
 
 function start(req,res) {
-    var result = {};
-    var IP = getClientIp(req);
-    if (req.method.toLowerCase() == 'post') {
-        var info = getInfo(req);
-        if (check[info['sid']] || check[info['sid']] == "") {
+    var result = "";
+    var Cookies = {};
+    req.headers.cookie && req.headers.cookie.split(';').forEach(function(Cookie) {
+        var parts = Cookie.split('=');
+        Cookies[parts[0].trim()] = (parts[1]||'').trim();
+    });
+    // var IP = getClientIp(req);
+	    var sid = Cookies["sid"];
+        if (check[sid] == "" || check[sid] == undefined) {
             require('crypto').randomBytes(16, function(ex, buf) {  
-                check[info['sid']] = buf.toString('hex');  
+                check[sid] = buf.toString('hex');  
+                result = check[sid];
+                res.writeHead(200, {"Content-Type": "text/plain"});
+                res.end(result);
             });
         }
         else {
-            result = {"status" : "failed",
-                      "info"   : "already start"};
+            result = "failed";
+            res.writeHead(200, {"Content-Type": "text/html"});
+            res.write(result);
+            res.end();
         }
-        if (IP in IPlist) {
-            result = {"status"    : "succeed",
-                      "info"      : "none",
-                      "checkCode" : check[info['sid']]};
-        }
-        else {
-            result = {"status" : "failed",
-                      "info"   : "invalid IP"}; 
-        }
-    }
-    else {
-        result = {"status" : "failed",
-                  "info"   : "unknown error,\n"
-                            +"please contact the admin"}; 
-    }
-    res.writeHead(200, {"Content-Type": "json"});
-    res.write(result);
-    res.end();
+        //if (IP in IPlist) {
+        //    console.log("result is " + result);
+        //}
+        //else {
+        //    result = {"status" : "failed",
+        //              "info"   : "invalid IP"}; 
+        //}
 }
 
 function end(req,res) {
-    if (req.method.toLowerCase() == 'post') {
-        var IP = getClientIp(req);
-        if (IP in IPlist) {
-            var info = getInfo(req);
-            if (check[info['sid']] == info['checkCode']
+        //var IP = getClientIp(req);
+        //if (IP in IPlist) {
+            var Cookies = {};
+            req.headers.cookie && req.headers.cookie.split(';').forEach(function(Cookie) {
+            var parts = Cookie.split('=');
+                Cookies[parts[0].trim()] = (parts[1]||'').trim();
+            });
+            query = url.parse(req.url).query;
+            var info = querystring.parse(query);
+			var sid = Cookies["sid"];
+            if (check[sid] == info['checkCode']
                 && parseInt(info['hour']) <= MAX_HOUR) {
-                check[info['sid']] = "";
+                check[sid] = "";
                 var log = {'date'    : info['date'],
-                           'std'     : info['std'],
+                           'std'     : sid,
                            'cls'     : info['cls'],
                            'st_time' : info['st_time'],
                            'ed_time' : info['ed_time'],
@@ -64,39 +68,29 @@ function end(req,res) {
                            'log'     : info['log']};
                 db.addLog(log, function(rlt){
                     if (rlt) {
-                        result = {'status' : 'succeed',
-                                  'info'   : "none",};
+                        result = 'succeed';
                     }
                     else {
-                        result = {'status' : 'failed',
-                                  'info'   : 'failed when insert log to db'
-                                             +', please contact the admin!'};
+                        result = 'failed';
                     }
+                    res.writeHead(200, {"Content-Type": "text/plain"});
+                    res.write(result);
+                    res.end();
                 });
             }
             else {
-                result = {"status" : "failed",
-                          "info"   : "secret code check failed! "
-                                    +"please contact the admin!"};
+                result = "failed";
+                res.writeHead(200, {"Content-Type": "text/plain"});
+                res.write(result);
+                res.end();
             }
-        }
-        else {
-            result = {"status" : "failed",
-                      "info"   : "invalid IP"}; 
-        }
-    }
-    else {
-        result = {"status" : "failed",
-                  "info"   : "unknown error,\n"
-                            +"please contact the admin"}; 
-    }
-    res.writeHead(200, {"Content-Type": "json"});
-     res.write(result);
-    res.end();
+        //}
+        //else {
+           // result = "failed";
+        //}
 }
 
-function chgInfo(rep,res){
-    if (req.method.toLowerCase() == 'post') {
+function chgInfo(req,res){
         var Cookies = {};
         req.headers.cookie && req.headers.cookie.split(';').forEach(function(Cookie) {
             var parts = Cookie.split('=');
@@ -111,7 +105,8 @@ function chgInfo(rep,res){
         }
         else db.login_check(Cookies['sid'],Cookies['psw'],function(rlt){
             if (rlt){
-                var info = getInfo(req);
+                query = url.parse(req.url).query;
+                var info = querystring.parse(query);
                 db.editUser(info,function(rst){
                     if (rst){
                         pre.load("Suc",{},function(err,file){
@@ -129,33 +124,9 @@ function chgInfo(rep,res){
                     }
                 });
             }
-            else {
-                pre.load("loginPage",{'info' : "login first"},function(err,file){
-                    res.writeHead(200, {"Content-Type": "text/html"});
-                    res.write(file, "utf-8");
-                    res.end();
-                });
-            }
         });
-    }
-    else {
-        pre.load("404",{},function(err,file){
-            res.writeHead(404, {"Content-Type": "text/html"});
-            res.write(file, "utf-8");
-            res.end();
-        });
-    }
 }
 
-function getInfo(req){
-    var info ='';  
-    req.addListener('data', function(chunk){  
-        info += chunk;  
-    }).addListener('end', function(){  
-        info = querystring.parse(info);  
-    }); 
-    return info;
-} // wait for change GET to POST
 
 getClientIP = function(req){
     var ipAddress;
@@ -166,8 +137,9 @@ getClientIP = function(req){
         ipAddress = req.connection.remoteAddress;
     }
     return ipAddress;
+}
 
 exports.start = start;
 exports.end = end;
 exports.chgInfo = chgInfo;
-}
+

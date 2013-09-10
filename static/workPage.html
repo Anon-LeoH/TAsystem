@@ -21,10 +21,10 @@
         <li id="l2">
             <ul class="list-inline">
               <li><a href="/home">主页</a></li>
-              <li><a href="/infoPage">个人信息</a></li>
+              <li><a href="/infoPage?WAIT_FOR_SID_REPLACE">个人信息</a></li>
             </ul>
         </li>
-        <li id="l3"><h6>欢迎！<a href="/infoPage?sid=WAIT_FOR_SID_REPLACE">WAIT_FOR_SID_REPLACE</a></h6></li>
+        <li id="l3"><h6>欢迎！<a href="/infoPage?sid=WAIT_FOR_SID_REPLACE">WAIT_FOR_SID_REPLACE</a>||<a href="/quit">注销</a></h6></li>
       </ul>
     </div>
     
@@ -101,7 +101,7 @@
             </form>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-success" data-dismiss="modal">提交</button>
+            <button type="button" class="btn btn-success" data-dismiss="modal" id="submit">提交</button>
           </div>
         </div><!-- /.modal-content -->
       </div><!-- /.modal-dialog -->

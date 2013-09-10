@@ -17,27 +17,29 @@ function login(req,res)
             var file;
             if(rlt) {
                 if (rlt == 2){
-                    pre.load("adminPage",{'sid' : sid},function(err,tmp){
-                        file = tmp;
+                    pre.load("adminPage",{'sid' : sid},function(err,file){
+                        res.writeHead(200,{"Set-Cookie"   : ["sid="+sid,"psw="+psw,"Max-Age=-1"],
+                                           "Content-Type" : "text/html"});
+                        res.write(file, "utf-8");
+                        res.end();
                     });
                 }
                 else {
-                    pre.load("workPage",{'sid' : sid},function(err,tmp){
-                        file = tmp;
+                    pre.load("workPage",{'sid' : sid},function(err,file){
+                        res.writeHead(200,{"Set-Cookie"   : ["sid="+sid,"psw="+psw,"Max-Age=-1"],
+                                           "Content-Type" : "text/html"});
+                        res.write(file, "utf-8");
+                        res.end();
                     });
                 }
-                res.writeHead(200,{"Set-Cookie"   : ["sid="+sid,"psw="+psw,"Max-Age=-1"],
-                                   "Content-Type" : "text/html"});
-                res.write(file, "utf-8");
-                res.end();
             }
             else {
-                pre.load("loginPage",{'info' : "login failed"},function(err,tmp){
-                    file = tmp;
+				console.log("loginFailed");
+                pre.load("loginPage",{'info' : "login failed"},function(err,file){
+                    res.writeHead(200, {"Content-Type": "text/html"});
+                    res.write(file, "utf-8");
+                    res.end();
                 });
-                res.writeHead(200, {"Content-Type": "text/html"});
-                res.write(file, "utf-8");
-                res.end();
             }
         });
     });
@@ -45,7 +47,7 @@ function login(req,res)
 
 function quit(req,res){
     pre.load("loginPage",{"info" : "log out"},function(err,file){
-        res.writeHead(200,{"Set-Cookie"   : "Max-Age=0",
+        res.writeHead(200,{"Set-Cookie"   : ["sid= psw= "],
                            "Content-Type" : "text/html"});
         res.write(file, "utf-8");
         res.end();

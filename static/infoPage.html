@@ -21,10 +21,10 @@
         <li id="l2">
             <ul class="list-inline">
               <li><a href="/home">主页</a></li>
-              <li><a href="/infoPage">个人信息</a></li>
+              <li><a href="/infoPage?sid=WAIT_FOR_SID_REPLACE">个人信息</a></li>
             </ul>
         </li>
-        <li id="l3"><h6>欢迎！<a href="/infoPage">WAIT_FOR_STD_REPLACE</a></h6></li>
+        <li id="l3"><h6>欢迎！<a href="/infoPage">WAIT_FOR_STD_REPLACE</a>||<a href="/quit">注销</a></h6></li>
       </ul>
     </div>
     
@@ -34,33 +34,30 @@
           <div class="container">
             <h3>个人信息：</h3>
             <p>=====================</p>
-            <form role="form" action="/chgInfo" method="post">
+			<form role="form" action="/chgInfo" method="get">
               <div class="form-group">
-                <label for="exampleInputSid">学号</label>
-                <input class="form-control" name="sid" type="text" placeholder="请输入学号"/>
+               <label for="exampleInputSid">学号</label>
+               <input class="form-control" name="sid" type="text" value="sid_example" readonly="readonly"/>
+              </div>
+              <div class="form-group">
+               <label for="exampleInputPassword">密码</label>
+               <input class="form-control" name="psw" type="password" value="psw_example"/>
               </div>
               <div class="form-group">
                <label for="exampleInputName">姓名</label>
-               <input class="form-control" name="name" type="text" placeholder="请输入姓名"/>
-              </div>
-              <div class="form-group">
-                <label for="exampleInputGroup">用户组</label>
-                <select class="form-control" name="group" placeholder="请选择用户组">
-                     <option value ="1">助理</option>
-                    <option value ="2">管理员</option>
-                </select>
+               <input class="form-control" name="name" type="text" value="name_example"/>
               </div>
               <div class="form-group">
                 <label for="exampleInputMajor">专业</label>
-                <input class="form-control" name="major" type="text" placeholder="请输入专业"/>
+                <input class="form-control" name="major" type="text" value="major_example"/>
               </div>
               <div class="form-group">
                 <label for="exampleInputPhone">电话</label>
-                <input class="form-control" name="major" type="text" placeholder="请输入电话"/>
+                <input class="form-control" name="phone" type="text" value="phone_example"/>
               </div>
               <div class="form-group">
                 <label for="exampleInputEmail">Email</label>
-                <input class="form-control" name="email" type="email" placeholder="请输入email"/>
+                <input class="form-control" name="email" type="email" value="email_example"/>
               </div>
               <div class="modal-footer">
                 <button type="submit" class="btn btn-large btn-success">提交</button>
