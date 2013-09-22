@@ -46,7 +46,7 @@ function index(req,res){
     });
 }
 
-function log(req,res){
+function logPage(req,res){
     var Cookies = {};
     req.headers.cookie && req.headers.cookie.split(';').forEach(function(Cookie) {
         var parts = Cookie.split('=');
@@ -64,19 +64,26 @@ function log(req,res){
             query = url.parse(req.url).query;
             var que = querystring.parse(query);
             if (que['sid']){
-                pre.load("logPage",{"sid" : que['sid']},function(err,file){
+                pre.load("logPage",{"type" : "-1" , "sid" : que['sid']},function(err,file){
                     res.writeHead(200, {"Content-Type": "text/html"});
                     res.write(file, "utf-8");
                     res.end();
                 });
             }
-            else {
-                pre.load("logPage",{},function(err,file){
+            else if (que["type"]){
+                pre.load("logPage",{"type" : type},function(err,file){
                     res.writeHead(200, {"Content-Type": "text/html"});
                     res.write(file, "utf-8");
                     res.end();
                 });
             }
+	        else {
+			    pre.load("logPage",{"type" : "0"},function(err,file){
+				    res.writeHead(200, {"Content-Type": "text/html"});
+					res.write(file, "utf-8");
+					res.end();
+				});
+			}
         }
         else {
             pre.load("loginPage",{'info' : "login first"},function(err,file){
@@ -283,7 +290,7 @@ function refreshTA(req,res){
 
 
 exports.index=index;
-exports.log=log;
+exports.log=logPage;
 exports.TAinfo = TAinfo;
 exports.addTA = addTA;
 exports.deleteTA = deleteTA;

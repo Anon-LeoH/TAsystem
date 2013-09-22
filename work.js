@@ -59,7 +59,9 @@ function end(req,res) {
             if (check[sid] == info['checkCode']
                 && parseInt(info['hour']) <= MAX_HOUR) {
                 check[sid] = "";
-                var log = {'date'    : info['date'],
+                var log = {'year'    : info['year'],
+					       'month'   : info['month'],
+						   'day'     : info['day'],
                            'std'     : sid,
                            'cls'     : info['cls'],
                            'st_time' : info['st_time'],

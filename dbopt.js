@@ -33,13 +33,15 @@ function login_check(sid,psw,callback){
 function addLog(log,callback){
     db.collection("logs",function(err,collection) {
         if (err) console.log("error when open collection:" + err);
-    collection.insert({    "date"   :log['date'],
-                           "std"    :log['std'],
-                           "cls"    :log['cls'],
-                           "st_time":log['st_time'],
-                           "ed_time":log['ed_time'],
-                           "hour"   :log['hour'],
-                           "log"    :log['log'],},
+    collection.insert({    "month"  : log['month'],
+		                   "year"   : log['year'],
+		                   "day"    : log['day']
+                           "std"    : log['std'],
+                           "cls"    : log['cls'],
+                           "st_time": log['st_time'],
+                           "ed_time": log['ed_time'],
+                           "hour"   : log['hour'],
+                           "log"    : log['log'],},
                            function(err,res){
                                if (!err) callback(1);
                                else {
@@ -48,6 +50,126 @@ function addLog(log,callback){
                                }
                            });
     });
+}
+
+function listLog(type, callback) {
+	db.collection("logs",function(err,collection) {
+        if (err) console.log("error when open collection:" + err);
+		collection.find().toArray(function(err,res){
+			for(i=0;i<res.length;i++){
+		        res[i]["date"] = res[i].year + "-" + res[i].month + "-" + res[i].day;
+			    res["st"] = res["st_time"].getHours() + ":" res["st_time"].getMinutes();
+			    res["ed"] = res["ed_time"].getHours() + ":" res["ed_time"].getMinutes();
+		    }
+		    if (type == "0") {
+			    callback(1,res);
+			}
+			else if (type == "1") {
+			    var tmp = [];
+				var month = new Date().getMonth() + 1;
+				var year = new Date().getFullYear();
+				for (i = 0; i < res.length; i++) {
+				    if (res[i].year == year && res[i].month == month) {
+					    tmp.push(res[i]);
+					}
+				}
+				callback(1,tmp);
+			}
+		    else if (type == "2") {
+			    var tmp = [];
+				var month = new Date().getMonth() + 1;
+				var year = new Date.getFullYear();
+				for (i = 0; i < res.length; i++) {
+				    if (res[i].year == year && res[i].month == month) {
+					    tmp.push(res[i]);
+					}
+				}
+				month = month - 1;
+				if (month == 0) {
+				    year -= 1;
+					month = 12;
+				}
+				for (i = 0; i < res.length; i++) {
+				    if (res[i].year == year && res[i].month == month) {
+					    tmp.push(res[i]);
+					}
+				}
+				month = month - 1;
+				if (month == 0) {
+				    year -= 1;
+					month = 12;
+				}
+				for (i = 0; i < res.length; i++) {
+				    if (res[i].year == year && res[i].month == month) {
+					    tmp.push(res[i]);
+					}
+				}
+				callback(1,tmp);
+			}
+			else {
+			    var tmp = [];
+				var month = new Date().getMonth() + 1;
+				var year = new Date().getFullYear();
+				for (j = 0; i < 12; i++) {
+				    for (i = 0; i < res.length; i++) {
+				        if (res[i].year == year && res[i].month == month) {
+					        tmp.push(res[i]);
+					    }
+				    }
+					month -= 1;
+					if (month == 0) {
+					    month = 12;
+						year -= 1;
+					}
+				}
+				callback(1,tmp);
+			}
+		});
+	});
+}
+
+function userLog(sid,callback) {
+    db.collection("logs",function(err,collection) {
+		collection.find().toArray(function(err,res){
+			tmp = [];
+		    for(i=0;i<res.length;i++){
+		        res[i]["date"] = res[i].year + "-" + res[i].month + "-" + res[i].day;
+			    res["st"] = res["st_time"].getHours() + ":" res["st_time"].getMinutes();
+			    res["ed"] = res["ed_time"].getHours() + ":" res["ed_time"].getMinutes();
+				if (res[i].sid == sid){
+				    tmp.push(res[i]);
+				}
+			}
+			callback(1,tmp);
+		});
+	});
+}
+
+function deleteLog(id,callback) {
+    db.collection("logs",function(err,collection) {
+        if (err) console.log("error when open collection:" + err);
+        collection.remove({"_id":id, },function(err,res){
+            if(!err) callback(1);
+            else callback(0);
+        });
+    });
+}
+
+function logInfo(id,callback) {
+    db.collection("logs",function(err,collection) {
+	    if (err) console.log("error when open collection:" + err);
+		collection.findOne({"_id" : id}, function(err,res) {
+		    var data = {};
+			data["sid"] = res["std"];
+			data["date"] = res["year"] + "-" + res["month"] + "-" + res["day"];
+			data["st"] = res["st_time"].getHours() + ":" res["st_time"].getMinutes();
+			data["ed"] = res["ed_time"].getHours() + ":" res["ed_time"].getMinutes();
+			data["hour"] = res["hour"];
+			data["cls"] = res["cls"];
+			data["log"] = res["log"];
+			callback(data);
+		});
+	});
 }
 
 function addUser(user,callback){
@@ -74,7 +196,6 @@ function deleteUser(sid,callback){
     db.collection("users",function(err,collection) {
         if (err) console.log("error when open collection:" + err);
         collection.remove({"sid":sid, },function(err,res){
-			console.log("aaaaaa");
             if(!err) callback(1);
             else callback(0);
         });

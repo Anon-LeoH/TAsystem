@@ -6,6 +6,7 @@ var db = require("./dbopt");
 var SID = "WAIT_FOR_SID_REPLACE";
 var BASIC_INFO = "WAIT_FOR_BASIC_INFO_REPLACE";
 var TA_INFO = "WAIT_FOR_TA_INFO_REPLACE";
+var SEARCH_BAR = "WAIT_FOR_SEARCH_BAR_REPLACE";
 
 function load(type,options,callback){
     if(type == "loginPage"){ // load loginPage
@@ -68,7 +69,7 @@ function load(type,options,callback){
         });
     }
 
-	else if(type === "infoPage"){
+	else if(type == "infoPage"){
 	    fs.readFile("./static/infoPage.html","utf-8",function(err,file){
             db.getUserInfo(options.sid,function(err,info){
 		        file = file.replace("sid_example",info.sid);
@@ -83,6 +84,70 @@ function load(type,options,callback){
 		});
 	}
 
+	else if (type == "logPage"){
+	    fs.readFile("./static/logPage.html","utf-8",function(err,file){
+		    if (options.type != "-1") {
+			    db.listLog(options.type,function(err,res){
+					fs.readFile("./static/searchBar.html","utf-8",function(err,tmp){
+					    file = file.replace(SEARCH_BAR,tmp);
+						fs.readFile("./static/tableLine.html","utf-8",function(err,tmp){
+							var item = "";
+						    for (i = 0; i < res.length; i++) {
+							    var chunk = tmp;
+								chunk = chunk.replace("sid_example",res[i].sid);
+								chunk = chunk.replace("date_example",res[i].date);
+								chunk = chunk.replace("st_example",res[i].st);
+								chunk = chunk.replace("ed_example",res[i].ed);
+								chunk = chunk.replace("hour_example",res[i].hour);
+								chunk = chunk.replace("cls_example",res[i].cls);
+								chunk = chunk.replace("log_example",res[i].log);
+								chunk = chunk.replace("lid_example",res[i]._id);
+								chunk = chunk.replace("lid_example",res[i]._id);
+								item += chunk;
+							}
+                            var basicInfo = formBasicInfo(user);
+                            file = file.replace(SID, options.sid);
+                            file = file.replace(SID, options.sid);
+                            file = file.replace(SID, options.sid);
+                            file = file.replace(BASIC_INFO, basicInfo);
+							file = file.replace("log_example",item);
+							callback(1,file);
+						});
+					});
+				});
+			}
+			else {
+			    db.userLog(options.sid,function(err,res){
+					fs.readFile("./static/searchBar.html","utf-8",function(err,tmp){
+					    file = file.replace(SEARCH_BAR,tmp);
+						fs.readFile("./static/tableLine.html","utf-8",function(err,tmp){
+							var item = "";
+						    for (i = 0; i < res.length; i++) {
+							    var chunk = tmp;
+								chunk = chunk.replace("sid_example",res[i].sid);
+								chunk = chunk.replace("date_example",res[i].date);
+								chunk = chunk.replace("st_example",res[i].st);
+								chunk = chunk.replace("ed_example",res[i].ed);
+								chunk = chunk.replace("hour_example",res[i].hour);
+								chunk = chunk.replace("cls_example",res[i].cls);
+								chunk = chunk.replace("log_example",res[i].log);
+								chunk = chunk.replace("lid_example",res[i]._id);
+								chunk = chunk.replace("lid_example",res[i]._id);
+								item += chunk;
+							}
+                            var basicInfo = formBasicInfo(user);
+                            file = file.replace(SID, options.sid);
+                            file = file.replace(SID, options.sid);
+                            file = file.replace(SID, options.sid);
+                            file = file.replace(BASIC_INFO, basicInfo);
+							file = file.replace("log_example",item);
+							callback(1,file);
+						});
+					});
+				});
+			}
+		});
+	}
     else {
         callBack(0, "404 ERROR OCCUR!");
     }

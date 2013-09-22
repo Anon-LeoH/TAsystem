@@ -123,7 +123,9 @@ $(document).ready(function(){
                 endTime = new Date();
                 data["st_time"] = startTime;
                 data["ed_time"] = endTime;
-                data["date"] = endTime.toLocaleDateString();
+                data["month"] = endTime.getMonth() + 1;
+				data["year"] = endTime.getFullYear();
+				data["day"] = endTime.getDay() + 1;
                 var sh = startTime.getHours();
                 var sm = startTime.getMinutes();
                 var eh = endTime.getHours();
@@ -134,7 +136,6 @@ $(document).ready(function(){
                 data["hour"] = hour;
             }
             var tmp = action["end"](data);
-			alert("step3");
             if (tmp) {
                 check_code = "";
                 stopclock();
@@ -146,5 +147,8 @@ $(document).ready(function(){
             }
         });
     });
+	window.onbeforeunload = function(){
+	    return "如果于工作状态离开，将产生不可预计的后果！";
+	};
 });
 
