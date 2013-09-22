@@ -147,14 +147,8 @@ $(document).ready(function(){
             }
         });
     });
-<<<<<<< HEAD
-	window.onbeforeunload = function(){
-	    return "如果于工作状态离开，将产生不可预计的后果！";
-	};
-=======
-    window.onbeforeunload=function(event){
-        return "如果尚未完成工作，此操作将造成不可预知后果，是否继续？";
-    }
->>>>>>> 637085a6275c409d3573feb666485f114373713d
+    window.onbeforeunload = function(){
+	return "如果于工作状态离开，将产生不可预计的后果！";
+    };
 });
 
