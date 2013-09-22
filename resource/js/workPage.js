@@ -146,5 +146,8 @@ $(document).ready(function(){
             }
         });
     });
+    window.onbeforeunload=function(event){
+        return "如果尚未完成工作，此操作将造成不可预知后果，是否继续？";
+    }
 });
 
