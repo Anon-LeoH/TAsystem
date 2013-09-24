@@ -135,6 +135,46 @@ function TAinfo(req,res){
     });
 }
 
+function logInfo(req,res){
+    var Cookies = {};
+    req.headers.cookie && req.headers.cookie.split(';').forEach(function(Cookie) {
+        var parts = Cookie.split('=');
+    Cookies[parts[0].trim()] = (parts[1]||'').trim();
+    });
+    if (Cookies == {}){
+        pre.load("loginPage",{'info' : "login first"},function(err,file){
+            res.writeHead(200, {"Content-Type": "text/html"});
+            res.write(file, "utf-8");
+            res.end();
+        });
+    }
+    else db.login_check(Cookies['sid'],Cookies['psw'],function(rlt){
+        if (rlt == 2) {
+		    query = url.parse(req.url).query;
+            var que = querystring.parse(query);
+            db.logInfo(que["lid"],funtion(err,rlt){
+                res.writeHead(200, {"Content-Type": "json"});
+                res.write(rlt);
+                res.end;
+            });
+        }
+        else if (rlt == 1) {
+            pre.load("workPage",{"sid" : Cookies['sid']},function(err,file){
+                res.writeHead(200, {"Content-Type": "text/html"});
+                res.write(file, "utf-8");
+                res.end();
+            });
+        }
+        else {
+            pre.load("loginPage",{'info' : "login first"},function(err,file){
+                res.writeHead(200, {"Content-Type": "text/html"});
+                res.write(file, "utf-8");
+                res.end();
+            });
+        }
+    });
+}
+
 function addTA(req,res){
     var Cookies = {};
     req.headers.cookie && req.headers.cookie.split(';').forEach(function(Cookie) {
@@ -169,6 +209,57 @@ function addTA(req,res){
                     }
                 });
         }
+            else if (rlt == 1){
+                pre.load("workPage",{"sid" : Cookies['sid']},function(err,file){
+                    res.writeHead(200, {"Content-Type": "text/html"});
+                    res.write(file, "utf-8");
+                    res.end();
+                });
+            }
+        else {
+            pre.load("loginPage",{'info' : "login first"},function(err,file){
+                res.writeHead(200, {"Content-Type": "text/html"});
+                res.write(file, "utf-8");
+                res.end();
+            });
+        }
+    });
+}
+
+function deleteLog(req,res){
+    var Cookies = {};
+    req.headers.cookie && req.headers.cookie.split(';').forEach(function(Cookie) {
+        var parts = Cookie.split('=');
+        Cookies[parts[0].trim()] = (parts[1]||'').trim();
+    });
+    if (Cookies == {}){
+        pre.load("loginPage",{'info' : "login first"},function(err,file){
+            res.writeHead(200, {"Content-Type": "text/html"});
+            res.write(file, "utf-8");
+            res.end();
+        });
+    }
+    else db.login_check(Cookies['sid'],Cookies['psw'],function(rlt){
+            if (rlt == 2){
+                query = url.parse(req.url).query;
+                var que = querystring.parse(query);
+                db.deleteLog(que["lid"], function(rst){
+                    if (rst) {
+                        pre.load("Suc",{},function(err,file){
+                            res.writeHead(200, {"Content-Type": "text/html"});
+                            res.write(file, "utf-8");
+                            res.end();
+                        });
+                    }
+                    else {
+                        pre.load("Fld",{},function(err,file){
+                            res.writeHead(200, {"Content-Type": "text/html"});
+                            res.write(file, "utf-8");
+                            res.end();
+                        });
+                    }
+                });
+            }
             else if (rlt == 1){
                 pre.load("workPage",{"sid" : Cookies['sid']},function(err,file){
                     res.writeHead(200, {"Content-Type": "text/html"});

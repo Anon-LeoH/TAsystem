@@ -20,7 +20,6 @@ function start(req,res) {
         var parts = Cookie.split('=');
         Cookies[parts[0].trim()] = (parts[1]||'').trim();
     });
-    // var IP = getClientIp(req);
 	    var sid = Cookies["sid"];
         if (check[sid] == "" || check[sid] == undefined) {
             require('crypto').randomBytes(16, function(ex, buf) {  
@@ -36,18 +35,9 @@ function start(req,res) {
             res.write(result);
             res.end();
         }
-        //if (IP in IPlist) {
-        //    console.log("result is " + result);
-        //}
-        //else {
-        //    result = {"status" : "failed",
-        //              "info"   : "invalid IP"}; 
-        //}
 }
 
 function end(req,res) {
-        //var IP = getClientIp(req);
-        //if (IP in IPlist) {
             var Cookies = {};
             req.headers.cookie && req.headers.cookie.split(';').forEach(function(Cookie) {
             var parts = Cookie.split('=');
@@ -86,10 +76,6 @@ function end(req,res) {
                 res.write(result);
                 res.end();
             }
-        //}
-        //else {
-           // result = "failed";
-        //}
 }
 
 function chgInfo(req,res){
@@ -127,18 +113,6 @@ function chgInfo(req,res){
                 });
             }
         });
-}
-
-
-getClientIP = function(req){
-    var ipAddress;
-    var headers = req.headers;
-    var forwardedIpsStr = headers['x-real-ip'] || headers['x-forwarded-for'];
-    forwardedIpsStr ? ipAddress = forwardedIpsStr : ipAddress = null;
-    if (!ipAddress) {
-        ipAddress = req.connection.remoteAddress;
-    }
-    return ipAddress;
 }
 
 exports.start = start;
