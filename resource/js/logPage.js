@@ -17,6 +17,7 @@ $(document).ready(function(){
             url      : "/logInfo",
             data     : { "lid" : lid,},
             success  : function(data) {
+                           data = JSON.parse(data);
                            if (data.info == "success"){
                                $("#sid").replaceWith("<p id='sid'>" + data.sid + "</p>");
 							   $("#date").replaceWith("<p id='date'>" + data.date + "</p>");
@@ -34,7 +35,7 @@ $(document).ready(function(){
             error    : function() {
                            alert("无法链接服务器！");
             },
-            dataType : 'json',
+            dataType : 'text',
             async    : false,
         });
     });

@@ -64,7 +64,7 @@ function load(type,options,callback){
 
     else if(type == "Fld"){
         fs.readFile("./static/jumpOut.html","utf-8",function(err,file){
-            file = file.repace("WAIT_FOR_REPLACE", "操作失败！");
+            file = file.replace("WAIT_FOR_REPLACE", "操作失败！");
             callback(0,file);
         });
     }
@@ -88,38 +88,37 @@ function load(type,options,callback){
 	    fs.readFile("./static/logPage.html","utf-8",function(err,file){
 		    if (options.type != "-1") {
 			    db.listLog(options.type,function(err,res){
-					fs.readFile("./static/searchBar.html","utf-8",function(err,tmp){
+					fs.readFile("./static/searchLog.html","utf-8",function(err,tmp){
 					    file = file.replace(SEARCH_BAR,tmp);
 						fs.readFile("./static/tableLine.html","utf-8",function(err,tmp){
 							var item = "";
 						    for (i = 0; i < res.length; i++) {
 							    var chunk = tmp;
-								chunk = chunk.replace("sid_example",res[i].sid);
+								chunk = chunk.replace("name_example",res[i].std);
 								chunk = chunk.replace("date_example",res[i].date);
 								chunk = chunk.replace("st_example",res[i].st);
 								chunk = chunk.replace("ed_example",res[i].ed);
 								chunk = chunk.replace("hour_example",res[i].hour);
-								chunk = chunk.replace("cls_example",res[i].cls);
-								chunk = chunk.replace("log_example",res[i].log);
 								chunk = chunk.replace("lid_example",res[i]._id);
 								chunk = chunk.replace("lid_example",res[i]._id);
 								item += chunk;
 							}
-                            var basicInfo = formBasicInfo(user);
-                            file = file.replace(SID, options.sid);
-                            file = file.replace(SID, options.sid);
-                            file = file.replace(SID, options.sid);
-                            file = file.replace(BASIC_INFO, basicInfo);
-							file = file.replace("log_example",item);
-							callback(1,file);
+                            db.getUserInfo(options.sid, function(err,user){
+                                var basicInfo = formBasicInfo(user);
+                                file = file.replace(SID, options.sid);
+                                file = file.replace(SID, options.sid);
+                                file = file.replace(SID, options.sid);
+                                file = file.replace(BASIC_INFO, basicInfo);
+							    file = file.replace("log_example",item);
+							    callback(1,file);
+                            });
 						});
 					});
 				});
 			}
 			else {
 			    db.userLog(options.sid,function(err,res){
-					fs.readFile("./static/searchBar.html","utf-8",function(err,tmp){
-					    file = file.replace(SEARCH_BAR,tmp);
+					fs.readFile("./static/searchLog.html","utf-8",function(err,tmp){
 						fs.readFile("./static/tableLine.html","utf-8",function(err,tmp){
 							var item = "";
 						    for (i = 0; i < res.length; i++) {
@@ -129,19 +128,19 @@ function load(type,options,callback){
 								chunk = chunk.replace("st_example",res[i].st);
 								chunk = chunk.replace("ed_example",res[i].ed);
 								chunk = chunk.replace("hour_example",res[i].hour);
-								chunk = chunk.replace("cls_example",res[i].cls);
-								chunk = chunk.replace("log_example",res[i].log);
 								chunk = chunk.replace("lid_example",res[i]._id);
 								chunk = chunk.replace("lid_example",res[i]._id);
 								item += chunk;
 							}
-                            var basicInfo = formBasicInfo(user);
-                            file = file.replace(SID, options.sid);
-                            file = file.replace(SID, options.sid);
-                            file = file.replace(SID, options.sid);
-                            file = file.replace(BASIC_INFO, basicInfo);
-							file = file.replace("log_example",item);
-							callback(1,file);
+                            db.getUserInfo(options.sid, function(err,user){
+                                var basicInfo = formBasicInfo(user);
+                                file = file.replace(SID, options.sid);
+                                file = file.replace(SID, options.sid);
+                                file = file.replace(SID, options.sid);
+                                file = file.replace(BASIC_INFO, basicInfo);
+							    file = file.replace("log_example",item);
+							    callback(1,file);
+                            });
 						});
 					});
 				});

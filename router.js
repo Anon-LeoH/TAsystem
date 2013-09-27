@@ -23,8 +23,9 @@ function init() {
     handle["/addTA"] = admin.addTA;
     handle["/deleteTA"] = admin.deleteTA;
     handle["/refreshTA"]= admin.refreshTA;
-    handle["/logPage"] = admin.log;
+    handle["/logPage"] = admin.logPage;
 	handle["/logInfo"] = admin.logInfo;
+    handle["/deleteLog"] = admin.deleteLog;
     handle["/TAinfo"] = admin.TAinfo;        
     console.log("Router inited.");
 }

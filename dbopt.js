@@ -35,7 +35,7 @@ function addLog(log,callback){
         if (err) console.log("error when open collection:" + err);
     collection.insert({    "month"  : log['month'],
 		                   "year"   : log['year'],
-		                   "day"    : log['day']
+		                   "day"    : log['day'],
                            "std"    : log['std'],
                            "cls"    : log['cls'],
                            "st_time": log['st_time'],
@@ -56,10 +56,13 @@ function listLog(type, callback) {
 	db.collection("logs",function(err,collection) {
         if (err) console.log("error when open collection:" + err);
 		collection.find().toArray(function(err,res){
+            console.log(res||err);
 			for(i=0;i<res.length;i++){
 		        res[i]["date"] = res[i].year + "-" + res[i].month + "-" + res[i].day;
-			    res["st"] = res["st_time"].getHours() + ":" res["st_time"].getMinutes();
-			    res["ed"] = res["ed_time"].getHours() + ":" res["ed_time"].getMinutes();
+			    res[i]["st"] = new Date(parseInt(res[i]["st_time"])).getHours() + ":" +
+                               new Date(parseInt(res[i]["st_time"])).getMinutes();
+			    res[i]["ed"] = new Date(parseInt(res[i]["ed_time"])).getHours() + ":" + 
+                               new Date(parseInt(res[i]["ed_time"])).getMinutes();
 		    }
 		    if (type == "0") {
 			    callback(1,res);
@@ -78,7 +81,7 @@ function listLog(type, callback) {
 		    else if (type == "2") {
 			    var tmp = [];
 				var month = new Date().getMonth() + 1;
-				var year = new Date.getFullYear();
+				var year = new Date().getFullYear();
 				for (i = 0; i < res.length; i++) {
 				    if (res[i].year == year && res[i].month == month) {
 					    tmp.push(res[i]);
@@ -134,8 +137,10 @@ function userLog(sid,callback) {
 			tmp = [];
 		    for(i=0;i<res.length;i++){
 		        res[i]["date"] = res[i].year + "-" + res[i].month + "-" + res[i].day;
-			    res["st"] = res["st_time"].getHours() + ":" res["st_time"].getMinutes();
-			    res["ed"] = res["ed_time"].getHours() + ":" res["ed_time"].getMinutes();
+			    res[i]["st"] = new Date(parseInt(res[i]["st_time"])).getHours() + ":" + 
+                               new Date(parseInt(res[i]["st_time"])).getMinutes();
+			    res[i]["ed"] = new Date(parseInt(res[i]["ed_time"])).getHours() + ":" + 
+                               new Date(parseInt(res[i]["ed_time"])).getMinutes();
 				if (res[i].sid == sid){
 				    tmp.push(res[i]);
 				}
@@ -146,10 +151,11 @@ function userLog(sid,callback) {
 }
 
 function deleteLog(id,callback) {
+    console.log("id: " + id);
     db.collection("logs",function(err,collection) {
         if (err) console.log("error when open collection:" + err);
-        collection.remove({"_id":id, },function(err,res){
-            if(!err) callback(1);
+        collection.remove({"_id" : new mongodb.ObjectID(id)},function(err,res){
+            if(!err) callback(res);
             else callback(0);
         });
     });
@@ -158,16 +164,19 @@ function deleteLog(id,callback) {
 function logInfo(id,callback) {
     db.collection("logs",function(err,collection) {
 	    if (err) console.log("error when open collection:" + err);
-		collection.findOne({"_id" : id}, function(err,res) {
+		collection.findOne({"_id" : new mongodb.ObjectID(id)}, function(err,res) {
+            if (err) callback (0,{});
 		    var data = {};
 			data["sid"] = res["std"];
 			data["date"] = res["year"] + "-" + res["month"] + "-" + res["day"];
-			data["st"] = res["st_time"].getHours() + ":" res["st_time"].getMinutes();
-			data["ed"] = res["ed_time"].getHours() + ":" res["ed_time"].getMinutes();
+			data["st"] = new Date(parseInt(res["st_time"])).getHours() + ":" + 
+                         new Date(parseInt(res["st_time"])).getMinutes();
+			data["ed"] = new Date(parseInt(res["ed_time"])).getHours() + ":" + 
+                         new Date(parseInt(res["ed_time"])).getMinutes();
 			data["hour"] = res["hour"];
 			data["cls"] = res["cls"];
 			data["log"] = res["log"];
-			callback(data);
+			callback(1,data);
 		});
 	});
 }
@@ -255,4 +264,8 @@ exports.deleteUser = deleteUser;
 exports.editUser = editUser;
 exports.getUserInfo = getUserInfo;
 exports.getAllInfo = getAllInfo;
+exports.listLog = listLog;
+exports.userLog = userLog;
+exports.logInfo = logInfo;
+exports.deleteLog = deleteLog;
 

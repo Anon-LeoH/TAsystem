@@ -50,11 +50,13 @@ db.open(function(err,db){
             else {
         console.log("collection DB.TAsys.logs created.");
 		        collection.remove(function(){});
-                collection.insert({"date":"2013-3-15",
+                collection.insert({"year":"2013",
+                                   "month":"09",
+                                   "day":"16",
                                    "std":"10000001",
                                    "cls":"B401",
-                                   "st_time":new Date(),
-                                   "ed_time":new Date(),
+                                   "st_time":new Date().getTime(),
+                                   "ed_time":new Date().getTime(),
                                    "hour":"0.0",
                                    "log":"今天很不高兴",}, //初始化test信息
                                    {safe:true},

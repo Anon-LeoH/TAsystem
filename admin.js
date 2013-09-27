@@ -71,14 +71,14 @@ function logPage(req,res){
                 });
             }
             else if (que["type"]){
-                pre.load("logPage",{"type" : type},function(err,file){
+                pre.load("logPage",{"type" : que["type"], "sid" : que["sid"]},function(err,file){
                     res.writeHead(200, {"Content-Type": "text/html"});
                     res.write(file, "utf-8");
                     res.end();
                 });
             }
 	        else {
-			    pre.load("logPage",{"type" : "0"},function(err,file){
+			    pre.load("logPage",{"type" : "0", "sid" : que["sid"]},function(err,file){
 				    res.writeHead(200, {"Content-Type": "text/html"});
 					res.write(file, "utf-8");
 					res.end();
@@ -152,9 +152,10 @@ function logInfo(req,res){
         if (rlt == 2) {
 		    query = url.parse(req.url).query;
             var que = querystring.parse(query);
-            db.logInfo(que["lid"],funtion(err,rlt){
-                res.writeHead(200, {"Content-Type": "json"});
-                res.write(rlt);
+            db.logInfo(que["lid"],function(err,rlt){
+                rlt["info"] = "success";
+                res.writeHead(200, {"Content-Type": "text/plain"});
+                res.write(JSON.stringify(rlt));
                 res.end;
             });
         }
@@ -244,6 +245,7 @@ function deleteLog(req,res){
                 query = url.parse(req.url).query;
                 var que = querystring.parse(query);
                 db.deleteLog(que["lid"], function(rst){
+                    console.log("in delete log");
                     if (rst) {
                         pre.load("Suc",{},function(err,file){
                             res.writeHead(200, {"Content-Type": "text/html"});
@@ -381,7 +383,9 @@ function refreshTA(req,res){
 
 
 exports.index=index;
-exports.log=logPage;
+exports.logPage=logPage;
+exports.logInfo=logInfo;
+exports.deleteLog=deleteLog;
 exports.TAinfo = TAinfo;
 exports.addTA = addTA;
 exports.deleteTA = deleteTA;

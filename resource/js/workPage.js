@@ -107,32 +107,22 @@ $(document).ready(function(){
         $('#myModal').modal('show');
         $('#submit').on('click',function(){
             var data = {};
-            texts = $(":textarea",$('myModal'));
-            selects = $(":select",$('myModal'));
-            for(i = 0; i < texts.length; i++){
-                data[texts[i].attr("name")] = texts[i].attr("value");
-            }
-            for(i = 0; i < selects.length; i++){
-                data[selects[i].attr("name")] = selects[i].attr("value");
-            }
+            data['cls'] = $("#ipt-cls").val;
+            data['log'] = $("#ipt-log").val;
             if (data['cls'] == ""){
                 alert("结束工作失败，请填写好工作日志！");
                 return;
             }
             else {
                 endTime = new Date();
-                data["st_time"] = startTime;
-                data["ed_time"] = endTime;
+                data["st_time"] = startTime.getTime();
+                data["ed_time"] = endTime.getTime();
                 data["month"] = endTime.getMonth() + 1;
 				data["year"] = endTime.getFullYear();
 				data["day"] = endTime.getDay() + 1;
-                var sh = startTime.getHours();
-                var sm = startTime.getMinutes();
-                var eh = endTime.getHours();
-                var em = endTime.getMinutes();
-                var hour = eh - sh;
-                if (em - sm >= 40) hour ++;
-                else if (em - sm < -20) hour --;
+                var sh = startTime.getTime();
+                var eh = endTime.getTime();
+                var hour = (eh-sh)/360000.0;
                 data["hour"] = hour;
             }
             var tmp = action["end"](data);
