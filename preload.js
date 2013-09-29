@@ -46,6 +46,7 @@ function load(type,options,callback){
                         file = file.replace(SID, options.sid);
                         file = file.replace(SID, options.sid);
                         file = file.replace(SID, options.sid);
+                        file = file.replace(SID, options.sid);
                         file = file.replace(BASIC_INFO, basicInfo);
                         file = file.replace(TA_INFO, item);
                         callback(0,file);
@@ -73,6 +74,7 @@ function load(type,options,callback){
 	    fs.readFile("./static/infoPage.html","utf-8",function(err,file){
             db.getUserInfo(options.sid,function(err,info){
 		        file = file.replace("sid_example",info.sid);
+		        file = file.replace(SID,info.sid);
 		        file = file.replace(SID,info.sid);
 		        file = file.replace("psw_example",info.psw);
                 file = file.replace("name_example", info.name);
@@ -118,12 +120,13 @@ function load(type,options,callback){
 			}
 			else {
 			    db.userLog(options.sid,function(err,res){
-					fs.readFile("./static/searchLog.html","utf-8",function(err,tmp){
+                    db.getUserInfo(options.sid, function(err,user){
+                        file = file.replace(SEARCH_BAR,user.name);
 						fs.readFile("./static/tableLine.html","utf-8",function(err,tmp){
 							var item = "";
 						    for (i = 0; i < res.length; i++) {
 							    var chunk = tmp;
-								chunk = chunk.replace("sid_example",res[i].sid);
+								chunk = chunk.replace("name_example",res[i].std);
 								chunk = chunk.replace("date_example",res[i].date);
 								chunk = chunk.replace("st_example",res[i].st);
 								chunk = chunk.replace("ed_example",res[i].ed);
@@ -132,11 +135,11 @@ function load(type,options,callback){
 								chunk = chunk.replace("lid_example",res[i]._id);
 								item += chunk;
 							}
-                            db.getUserInfo(options.sid, function(err,user){
+                            db.getUserInfo(options.admin, function(err,user){
                                 var basicInfo = formBasicInfo(user);
-                                file = file.replace(SID, options.sid);
-                                file = file.replace(SID, options.sid);
-                                file = file.replace(SID, options.sid);
+                                file = file.replace(SID, options.admin);
+                                file = file.replace(SID, options.admin);
+                                file = file.replace(SID, options.admin);
                                 file = file.replace(BASIC_INFO, basicInfo);
 							    file = file.replace("log_example",item);
 							    callback(1,file);

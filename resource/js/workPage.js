@@ -105,37 +105,37 @@ $(document).ready(function(){
             return;
         }
         $('#myModal').modal('show');
-        $('#submit').on('click',function(){
-            var data = {};
-            data['cls'] = $("#ipt-cls").val;
-            data['log'] = $("#ipt-log").val;
-            if (data['cls'] == ""){
-                alert("结束工作失败，请填写好工作日志！");
-                return;
-            }
-            else {
-                endTime = new Date();
-                data["st_time"] = startTime.getTime();
-                data["ed_time"] = endTime.getTime();
-                data["month"] = endTime.getMonth() + 1;
-				data["year"] = endTime.getFullYear();
-				data["day"] = endTime.getDay() + 1;
-                var sh = startTime.getTime();
-                var eh = endTime.getTime();
-                var hour = (eh-sh)/360000.0;
-                data["hour"] = hour;
-            }
-            var tmp = action["end"](data);
-            if (tmp) {
-                check_code = "";
-                stopclock();
-                $("#time").replaceWith("<h4 id='time'>0:0:0</h4>");      
-                $("#status").replaceWith("<td style='width:70%;' id='status'>未开始</td>");                
-            }
-            else {
-                alert("结束工作失败，请再次尝试！");
-            }
-        });
+    });
+    $('#submit').on('click',function(){
+        var data = {};
+        data['cls'] = $("#ipt-cls").val();
+        data['log'] = $("#ipt-log").val();
+        if (data['cls'] == ""){
+            alert("结束工作失败，请填写好工作日志！");
+            return;
+        }
+        else {
+            endTime = new Date();
+            data["st_time"] = startTime.getTime();
+            data["ed_time"] = endTime.getTime();
+            data["month"] = endTime.getMonth() + 1;
+            data["year"] = endTime.getFullYear();
+            data["day"] = endTime.getDay() + 1;
+            var sh = startTime.getTime();
+            var eh = endTime.getTime();
+            var hour = (eh-sh)/360000.0;
+            data["hour"] = hour;
+        }
+        var tmp = action["end"](data);
+        if (tmp) {
+            check_code = "";
+            stopclock();
+            $("#time").replaceWith("<h4 id='time'>0:0:0</h4>");      
+            $("#status").replaceWith("<td style='width:70%;' id='status'>未开始</td>");                
+        }
+        else {
+            alert("结束工作失败，请再次尝试！");
+        }
     });
     window.onbeforeunload = function(){
 	return "如果于工作状态离开，将产生不可预计的后果！";

@@ -64,21 +64,22 @@ function logPage(req,res){
             query = url.parse(req.url).query;
             var que = querystring.parse(query);
             if (que['sid']){
-                pre.load("logPage",{"type" : "-1" , "sid" : que['sid']},function(err,file){
+                pre.load("logPage",{"type" : "-1" , "sid" : que['sid'],
+                                    "admin" : Cookies["sid"]},function(err,file){
                     res.writeHead(200, {"Content-Type": "text/html"});
                     res.write(file, "utf-8");
                     res.end();
                 });
             }
             else if (que["type"]){
-                pre.load("logPage",{"type" : que["type"], "sid" : que["sid"]},function(err,file){
+                pre.load("logPage",{"type" : que["type"], "sid" : Cookies["sid"]},function(err,file){
                     res.writeHead(200, {"Content-Type": "text/html"});
                     res.write(file, "utf-8");
                     res.end();
                 });
             }
 	        else {
-			    pre.load("logPage",{"type" : "0", "sid" : que["sid"]},function(err,file){
+			    pre.load("logPage",{"type" : "0", "sid" : Cookies["sid"]},function(err,file){
 				    res.writeHead(200, {"Content-Type": "text/html"});
 					res.write(file, "utf-8");
 					res.end();
@@ -155,8 +156,8 @@ function logInfo(req,res){
             db.logInfo(que["lid"],function(err,rlt){
                 rlt["info"] = "success";
                 res.writeHead(200, {"Content-Type": "text/plain"});
-                res.write(JSON.stringify(rlt));
-                res.end;
+                rlt = JSON.stringify(rlt);
+                res.end(rlt);
             });
         }
         else if (rlt == 1) {

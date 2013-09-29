@@ -56,7 +56,6 @@ function listLog(type, callback) {
 	db.collection("logs",function(err,collection) {
         if (err) console.log("error when open collection:" + err);
 		collection.find().toArray(function(err,res){
-            console.log(res||err);
 			for(i=0;i<res.length;i++){
 		        res[i]["date"] = res[i].year + "-" + res[i].month + "-" + res[i].day;
 			    res[i]["st"] = new Date(parseInt(res[i]["st_time"])).getHours() + ":" +
@@ -113,10 +112,10 @@ function listLog(type, callback) {
 			    var tmp = [];
 				var month = new Date().getMonth() + 1;
 				var year = new Date().getFullYear();
-				for (j = 0; i < 12; i++) {
-				    for (i = 0; i < res.length; i++) {
-				        if (res[i].year == year && res[i].month == month) {
-					        tmp.push(res[i]);
+				for (i = 0; i < 12; i++) {
+				    for (j = 0; j < res.length; j++) {
+				        if (res[j].year == year && res[j].month == month) {
+					        tmp.push(res[j]);
 					    }
 				    }
 					month -= 1;
@@ -134,14 +133,14 @@ function listLog(type, callback) {
 function userLog(sid,callback) {
     db.collection("logs",function(err,collection) {
 		collection.find().toArray(function(err,res){
-			tmp = [];
+			var tmp = [];
 		    for(i=0;i<res.length;i++){
 		        res[i]["date"] = res[i].year + "-" + res[i].month + "-" + res[i].day;
 			    res[i]["st"] = new Date(parseInt(res[i]["st_time"])).getHours() + ":" + 
                                new Date(parseInt(res[i]["st_time"])).getMinutes();
 			    res[i]["ed"] = new Date(parseInt(res[i]["ed_time"])).getHours() + ":" + 
                                new Date(parseInt(res[i]["ed_time"])).getMinutes();
-				if (res[i].sid == sid){
+				if (res[i].std == sid){
 				    tmp.push(res[i]);
 				}
 			}
