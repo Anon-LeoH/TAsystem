@@ -113,3 +113,11 @@ PS:代码风格还很乱，明天复习完军理再改
 
 =============================================================================
 9月22日以上
+
+PS: 1.user whole hours caculator
+    2.deleteLog jumpout page
+    3.sid view->name view
+    4.csv into db
+    5.some pages view
+    (this will be delete later)
+
