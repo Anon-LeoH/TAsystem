@@ -34,10 +34,15 @@ A system for the sysu lab assistent;
   暂时写ubuntu下如何配置……
   过两天有时间再加
 
-  安装nodejs        : sudo apt-get install nodejs
-  安装mongodb       : sudo apt-get install mongodb（安装后默认开启）
-  安装npm           : sudo apt-get install npm
-  安装mongodb的js库 : sudo npm install mongodb
-  初始化数据库      : node _%TAsystemdir%_/dbinit.js
-  配置服务器        : node _%TAsystemdir%_/server.js
-  进入页面          : 浏览器输入localhost:8080
+````bash
+$ chmod +x setup.sh
+$ sudo ./setup.sh
+
+# 初始化数据库
+$ nodejs dbinit.js
+
+# 运行服务端程序
+$ nodejs server.js
+````
+
+进入页面: 浏览器输入localhost:8080
