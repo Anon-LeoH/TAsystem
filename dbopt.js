@@ -17,7 +17,7 @@ function startdb() {
 
 function login_check(sid,psw,callback){
      db.collection("users",function(err,collection) {
-        if (err) console.log("error when open collection" + err)
+        if (err) console.log("error when open collection" + err);
         else collection.findOne({'sid': sid, 'psw': psw, },function(err,res){
         if (err) {
             console.log("Find user error");
@@ -150,7 +150,6 @@ function userLog(sid,callback) {
 }
 
 function deleteLog(id,callback) {
-    console.log("id: " + id);
     db.collection("logs",function(err,collection) {
         if (err) console.log("error when open collection:" + err);
         collection.remove({"_id" : new mongodb.ObjectID(id)},function(err,res){
@@ -249,9 +248,30 @@ function getUserInfo(sid,callback){
 function getAllInfo(callback){
     db.collection("users",function(err,collection) {
         if (err) console.log("error when open collection" + err);
-    collection.find().toArray(function(err,res){
-            callback(1,res)
-    });
+        collection.find().toArray(function(err,users){
+            db.collection("logs",function(err,collection){
+                collection.find().toArray(function(err,logs){
+                    var date = new Date();
+                    var year = date.getFullYear();
+                    var month = date.getMonth();
+                    if (month == 0){
+                        year --;
+                        month = 12;
+                    }
+                    for (i=0;i<users.length;i++){
+                        users[i].hour = 0;
+                        for (j=0;j<logs.length;j++){
+                            if (logs[j].std == users[i].sid
+                                && logs[j].year == year
+                                && logs[j].month == month){
+                                users[i].hour += parseFloat(logs[j].hour);
+                            }
+                        }
+                    }
+                    callback(1,users);
+                });
+            });
+        });
     });
 }
 

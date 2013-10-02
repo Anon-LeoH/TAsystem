@@ -114,10 +114,33 @@ PS:代码风格还很乱，明天复习完军理再改
 =============================================================================
 9月22日以上
 
-PS: 1.user whole hours caculator
-    2.deleteLog jumpout page
-    3.sid view->name view
-    4.csv into db
-    5.some pages view
-    (this will be delete later)
+####10月2日开发LOG：
 
+#####截至今天项目情况如下：
+-----------------------------------------------------------------------------
+备注：标志“完成”的模块也可能根据实际情况增改；
+	  *this will be done when the wedsite is being used；
+-----------------------------------------------------------------------------
+_模块_          _编写情况_                               _测试情况_
+html            done                                     done
+css             done                                     done
+前端js          done                                     done
+router.js       done                                     done
+server.js       done                                     done
+dbinit.js       done                                     done
+dbopt.js        done                                     done
+page.js         done                                     done
+work.js         done                                     done
+admin.js        done                                     done
+fileserver.js   done                                     done
+sign_in.js      done                                     done
+preload.js      done                                     done
+csv.js          undo*                                    undo
+------------------------------------------------------------------------------
+
+_until now the wedsite can run with nearly no bugs._
+_once the server is set up it will function well._
+_I\'ll finish the code style changing during the whole semester.
+
+LOG of Oct.2 2013
+==============================================================================_

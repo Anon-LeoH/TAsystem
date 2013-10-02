@@ -4,6 +4,7 @@ var fs = require("fs");
 var querystring = require("querystring");
 var db = require("./dbopt");
 var SID = "WAIT_FOR_SID_REPLACE";
+var NAME = "WAIT_FOR_NAME_REPLACE";
 var BASIC_INFO = "WAIT_FOR_BASIC_INFO_REPLACE";
 var TA_INFO = "WAIT_FOR_TA_INFO_REPLACE";
 var SEARCH_BAR = "WAIT_FOR_SEARCH_BAR_REPLACE";
@@ -20,7 +21,7 @@ function load(type,options,callback){
         fs.readFile("./static/workPage.html","utf-8",function(err,file){
             db.getUserInfo(options.sid,function(err,user){
                 var basicInfo = formBasicInfo(user);
-                file = file.replace(SID, options.sid);
+                file = file.replace(NAME, user.name);
                 file = file.replace(SID, options.sid);
                 file = file.replace(SID, options.sid);
                 file = file.replace(BASIC_INFO, basicInfo);
@@ -43,7 +44,7 @@ function load(type,options,callback){
                             item += formTAInfo(allInfo[i],tmp);
                         }
                         item += "</tr>";
-                        file = file.replace(SID, options.sid);
+                        file = file.replace(NAME, user.name);
                         file = file.replace(SID, options.sid);
                         file = file.replace(SID, options.sid);
                         file = file.replace(SID, options.sid);
@@ -59,6 +60,7 @@ function load(type,options,callback){
     else if(type == "Suc"){
         fs.readFile("./static/jumpOut.html","utf-8",function(err,file){
             file = file.replace("WAIT_FOR_REPLACE", "操作成功！");
+            file = file.replace("url_example", options.url);
             callback(0,file);
         });
     }
@@ -66,6 +68,7 @@ function load(type,options,callback){
     else if(type == "Fld"){
         fs.readFile("./static/jumpOut.html","utf-8",function(err,file){
             file = file.replace("WAIT_FOR_REPLACE", "操作失败！");
+            file = file.replace("url_example", options.url);
             callback(0,file);
         });
     }
@@ -74,7 +77,7 @@ function load(type,options,callback){
 	    fs.readFile("./static/infoPage.html","utf-8",function(err,file){
             db.getUserInfo(options.sid,function(err,info){
 		        file = file.replace("sid_example",info.sid);
-		        file = file.replace(SID,info.sid);
+                file = file.replace(NAME, info.name);
 		        file = file.replace(SID,info.sid);
 		        file = file.replace("psw_example",info.psw);
                 file = file.replace("name_example", info.name);
@@ -107,7 +110,7 @@ function load(type,options,callback){
 							}
                             db.getUserInfo(options.sid, function(err,user){
                                 var basicInfo = formBasicInfo(user);
-                                file = file.replace(SID, options.sid);
+                                file = file.replace(NAME, user.name);
                                 file = file.replace(SID, options.sid);
                                 file = file.replace(SID, options.sid);
                                 file = file.replace(BASIC_INFO, basicInfo);
@@ -137,7 +140,7 @@ function load(type,options,callback){
 							}
                             db.getUserInfo(options.admin, function(err,user){
                                 var basicInfo = formBasicInfo(user);
-                                file = file.replace(SID, options.admin);
+                                file = file.replace(NAME, user.name);
                                 file = file.replace(SID, options.admin);
                                 file = file.replace(SID, options.admin);
                                 file = file.replace(BASIC_INFO, basicInfo);
@@ -166,6 +169,7 @@ function formTAInfo(info,tmp) {
     file = file.replace("major_example", info.major);
     file = file.replace("phone_example", info.phone);
     file = file.replace("email_example", info.email);
+    file = file.replace("whole_hour_example", info.hour);
 	return file;
 }
 

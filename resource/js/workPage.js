@@ -5,6 +5,7 @@ var endTime;
 function _init_() {
     var height = $("#mainContent").height();
     var width = $(window).width();
+    if (height < 400) height = 400;
     $("#info").css("height",height+"px");
     $(".well").css("height",height+"px");
     $(".header").css("width",width+"px");
@@ -120,7 +121,7 @@ $(document).ready(function(){
             data["ed_time"] = endTime.getTime();
             data["month"] = endTime.getMonth() + 1;
             data["year"] = endTime.getFullYear();
-            data["day"] = endTime.getDay() + 1;
+            data["day"] = endTime.getDate();
             var sh = startTime.getTime();
             var eh = endTime.getTime();
             var hour = (eh-sh)/360000.0;

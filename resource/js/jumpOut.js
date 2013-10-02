@@ -1,5 +1,6 @@
 function jumpOut() {
-    window.location.href="/home";
+    var url = $("a").attr("href");
+    window.location.href=url;
 }
 
 $(document).ready(function(){

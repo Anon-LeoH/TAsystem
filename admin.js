@@ -196,14 +196,14 @@ function addTA(req,res){
                 var que = querystring.parse(query);
                 db.addUser(que, function(rst){
                     if (rst) {
-                        pre.load("Suc",{},function(err,file){
+                        pre.load("Suc",{"url":"/home"},function(err,file){
                             res.writeHead(200, {"Content-Type": "text/html"});
                             res.write(file, "utf-8");
                             res.end();
                         });
                     }
                     else {
-                        pre.load("Fld",{},function(err,file){
+                        pre.load("Fld",{"url":"/home"},function(err,file){
                             res.writeHead(200, {"Content-Type": "text/html"});
                             res.write(file, "utf-8");
                             res.end();
@@ -246,16 +246,15 @@ function deleteLog(req,res){
                 query = url.parse(req.url).query;
                 var que = querystring.parse(query);
                 db.deleteLog(que["lid"], function(rst){
-                    console.log("in delete log");
                     if (rst) {
-                        pre.load("Suc",{},function(err,file){
+                        pre.load("Suc",{"url":"/logPage"},function(err,file){
                             res.writeHead(200, {"Content-Type": "text/html"});
                             res.write(file, "utf-8");
                             res.end();
                         });
                     }
                     else {
-                        pre.load("Fld",{},function(err,file){
+                        pre.load("Fld",{"url":"/logPage"},function(err,file){
                             res.writeHead(200, {"Content-Type": "text/html"});
                             res.write(file, "utf-8");
                             res.end();
@@ -299,14 +298,14 @@ function deleteTA(req,res){
                 var que = querystring.parse(query);
                 db.deleteUser(que["sid"], function(rst){
                     if (rst) {
-                        pre.load("Suc",{},function(err,file){
+                        pre.load("Suc",{"url":"/home"},function(err,file){
                             res.writeHead(200, {"Content-Type": "text/html"});
                             res.write(file, "utf-8");
                             res.end();
                         });
                     }
                     else {
-                        pre.load("Fld",{},function(err,file){
+                        pre.load("Fld",{"url":"/home"},function(err,file){
                             res.writeHead(200, {"Content-Type": "text/html"});
                             res.write(file, "utf-8");
                             res.end();
@@ -350,14 +349,14 @@ function refreshTA(req,res){
                 var que = querystring.parse(query);
                 db.editUser(que, function(rst){
                     if (rst) {
-                        pre.load("Suc",{},function(err,file){
+                        pre.load("Suc",{"url":"/home"},function(err,file){
                             res.writeHead(200, {"Content-Type": "text/html"});
                             res.write(file, "utf-8");
                             res.end();
                         });
                     }
                     else {
-                        pre.load("Fld",{},function(err,file){
+                        pre.load("Fld",{"url":"/home"},function(err,file){
                             res.writeHead(200, {"Content-Type": "text/html"});
                             res.write(file, "utf-8");
                             res.end();

@@ -97,14 +97,14 @@ function chgInfo(req,res){
                 var info = querystring.parse(query);
                 db.editUser(info,function(rst){
                     if (rst){
-                        pre.load("Suc",{},function(err,file){
+                        pre.load("Suc",{"url":"/home"},function(err,file){
                             res.writeHead(200, {"Content-Type": "text/html"});
                             res.write(file, "utf-8");
                             res.end();
                         });
                     }
                     else {
-                        pre.load("Fld",{},function(err,file){
+                        pre.load("Fld",{"url":"/home"},function(err,file){
                             res.writeHead(200, {"Content-Type": "text/html"});
                             res.write(file, "utf-8");
                             res.end();
