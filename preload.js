@@ -24,6 +24,7 @@ function load(type,options,callback){
                 file = file.replace(NAME, user.name);
                 file = file.replace(SID, options.sid);
                 file = file.replace(SID, options.sid);
+                file = file.replace(SID, options.sid);
                 file = file.replace(BASIC_INFO, basicInfo);
                 callback(0,file);
 			});
