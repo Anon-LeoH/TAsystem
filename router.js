@@ -11,26 +11,24 @@ var handle = {};
 var count = 0;
 
 function init() {
-    handle["/"] = page.index;
-    handle["/home"] = page.index;
-    handle["/infoPage"] = page.info;
-    handle["/chgInfo"] = work.chgInfo;
-    handle["/workStart"] = work.start;
-    handle["/workEnd"] = work.end;
-    handle["/login"] = sign.login;
-    handle["/quit"] = sign.quit;
-    handle["/admin"] = admin.index;
-    handle["/addTA"] = admin.addTA;
-    handle["/deleteTA"] = admin.deleteTA;
-    handle["/refreshTA"]= admin.refreshTA;
-    handle["/logPage"] = admin.logPage;
-	handle["/logInfo"] = admin.logInfo;
-    handle["/deleteLog"] = admin.deleteLog;
-    handle["/TAinfo"] = admin.TAinfo;        
+    handle["/"] = userOption.index;
+    handle["/home"] = userOption.index;
+    handle["/infoPage"] = userOption.infoPage;
+    handle["/chgInfo"] = userOption.chgInfo;
+    handle["/workStart"] = userOption.workStart;
+    handle["/workEnd"] = userOption.workEnd;
+    handle["/login"] = userOption.signIn;
+    handle["/quit"] = userOption.signOut;
+    handle["/addTA"] = userOption.addTA;
+    handle["/deleteTA"] = userOption.deleteTA;
+    handle["/logPage"] = userOption.logPage;
+    handle["/userLog"] = userOption.userLog;
+    handle["/handleLog"] = userOption.handleLog;
     console.log("Router inited.");
 }
 
 function route(request,response) {
+    // needs cookies parse
     pathname = url.parse(request.url).pathname;
     if (typeof handle[pathname] === 'function') {
             handle[pathname](request,response);

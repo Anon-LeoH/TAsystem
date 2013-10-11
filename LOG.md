@@ -144,3 +144,19 @@ _I\'ll finish the code style changing during the whole semester.
 
 LOG of Oct.2 2013
 ==============================================================================_
+
+10月11日开发日志：
+
+重写并且封装功能，重新规划后项目结构大致如下：
+
+server/router/fileserver.js 未做什么较大改动
+User.js 封装了类user以及派生类ta,admin，以及与用户本身有关的操作；
+Page.js 封装了类page以及所有生成页面的功能；
+userOption.js 是处理router派送请求的模块；
+tool.js 是集成一些高频操作以及与数据库模块交互操作的模块；
+dbopt.js 是集成了所有数据库操作的模块；
+csv.js 是后台用来操作csv的模块，无法通过web链接；
+
+现在其中的User.js和Page.js已经写完，正在写userOption.js;
+==============================================================================
+以上
