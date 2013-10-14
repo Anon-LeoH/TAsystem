@@ -1,9 +1,9 @@
-var path = require("path");
-var url = require("url");
-var querystring = require("querystring");
-var cls_page = require("./Page");
-var cls_user = require("./User");
-var db = require("./dbopt");
+var path = require('path');
+var url = require('url');
+var querystring = require('querystring');
+var cls_page = require('./Page');
+var cls_user = require('./User');
+var db = require('./dbopt');
 
 var pages = {};
 var tmpPage = cls_page.tmpPage();
@@ -14,12 +14,12 @@ function signIn(req, res, cookies) {
     var psw = data.psw;
     db.check(sid, psw, function(rlt, grp) {
       if (!rlt) {
-        tool.htmlRespond([],tmpPage.loginPage());
+        tool.htmlRespond([], tmpPage.loginPage());
         return;
       }
       var tmp = cls_user.newUser(sid, grp);
       pages[sid] = cls_page.newPage(tmp);
-      tool.htmlRespond(["sid=" + sid, "Max-Age=-1",], pages[sid].index());
+      tool.htmlRespond(['sid=' + sid, 'Max-Age=-1'], pages[sid].index());
       return;
     });
   });
@@ -27,30 +27,42 @@ function signIn(req, res, cookies) {
 
 function index(req, res, cookies) {
   var sid = cookies.sid;
-  i f(sid == undefined || pages[sid] == undefined || pages[sid] == "") {
-    tool.htmlRespond([],tmpPage.loginPage());
+  if(sid == undefined || pages[sid] == undefined || pages[sid] == '') {
+    tool.htmlRespond([], tmpPage.loginPage());
     return;
   }
-  tool.htmlRespond([],page[sid].index());
+  tool.htmlRespond([], page[sid].index());
 }
 
 function infoPage(req, res, cookies) {
   var sid = cookies.sid;
-  if (sid == undefined || pages[sid] == undefined || pages[sid] == "") {
-    tool.htmlRespond([],tmpPage.loginPage());
+  if (sid == undefined || pages[sid] == undefined || pages[sid] == '') {
+    tool.htmlRespond([], tmpPage.loginPage());
     return;
   }
   var query = url.parse(req.url).query;
   var sid = query.sid;
-  tool.htmlRespond([],page[cookies.sid].infoPage(sid));
+  tool.htmlRespond([], page[cookies.sid].infoPage(sid));
 }
 
-function 
+function chgInfo(req, res, cookies) {
+  var sid = cookies.sid;
+  if (sid == undefined || pages[sid] == undefined || pages[sid] == '') {
+    tool.htmlRespond([], tmpPage.loginPage());
+    return;
+  }
+  var tmpUser = tool.fetchPostData(req);
+  if (page[sid].user.changeInfo(tmpUser)) {
+    tool.htmlRespond([], page[sid].sucPage('/home'));
+  } else {
+    tool.htmlRespond([], page[sid].fldPage('/home'));
+  }
+}
 
 function workStart(req, res, cookies) {
   var sid = cookies.sid;
-  if (sid == undefined || pages[sid] == undefined || pages[sid] == "") {
-    tool.stringRespond("illegal");
+  if (sid == undefined || pages[sid] == undefined || pages[sid] == '') {
+    tool.stringRespond('illegal');
     return;
   }
   tool.fetchPostData(req, function(data) {
@@ -63,8 +75,8 @@ function workStart(req, res, cookies) {
 
 function workEnd(req, res, cookies) {
   var sid = cookies.sid;
-  if (sid == undefined || pages[sid] == undefined || pages[sid] == "") {
-    tool.stringRespond("illegal");
+  if (sid == undefined || pages[sid] == undefined || pages[sid] == '') {
+    tool.stringRespond('illegal');
     return;
   }
   tool.fetchPostData(req, function(data) {
@@ -78,13 +90,11 @@ function workEnd(req, res, cookies) {
 
 function userLog(req, res, cookies) {
   var sid = cookies.sid;
-  if (sid == undefined || pages[sid] == undefined || pages[sid] == "") {
-    tool.htmlRespond([],tmpPage.loginPage());
+  if (sid == undefined || pages[sid] == undefined || pages[sid] == '') {
+    tool.htmlRespond([], tmpPage.loginPage());
     return;
   }
   var query = url.parse(req.url).query;
   var sid = query.sid;
-  tool.htmlRespond([],page[cookies.sid].userLog(sid));
+  tool.htmlRespond([], page[cookies.sid].userLog(sid));
 }
-
-function 
