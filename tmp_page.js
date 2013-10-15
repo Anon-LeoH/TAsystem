@@ -66,7 +66,7 @@ var Page = {
       });
     };
 
-    page.logPage = function(ed_time) {
+    page.logPage = function() {
       fs.readFile('./static/logPage.html', 'utf-8', function(err, file) {
         if (err) return '404 not found';
         if (page.user.group != '2') return 'not admin';

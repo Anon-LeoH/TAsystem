@@ -10,8 +10,8 @@ var User = {
     user.changeInfo = function(newUser) {
       if (user.group == '1' && newUser.sid != user.sid) return 'denied';
       var tmp = tool.insertInfo(newUser);
-	  user = db.getUserInfo(user.sid);
-	  return tmp;
+      user = db.getUserInfo(user.sid);
+      return tmp;
     };
 
     return user;
@@ -72,7 +72,7 @@ var Admin = {
 
     admin.handleLog = function(ed_time) {
       for (i = 0; i < admin.undoList.length; i++) {
-        if (parseInt(admin.undoList[i].st_time) <= ed_time) {
+        if (parseInt(admin.undoList[i].st_time) <= ed_time.parse()) {
           admin.handle.push(admin.undoList[i]);
         }
       }
