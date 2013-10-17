@@ -22,7 +22,7 @@ var Page = {
     page.loginPage = function() {
       fs.readFile('./static/loginPage.html', 'utf-8', function(err, file) {
         if (err) return '404 not found';
-        return file;
+        callback(file);
       });
     };
 
@@ -84,7 +84,6 @@ var Page = {
         if (page.user.group != '2') {
           if (sid != page.user.sid) return 'not admin';
         }
-        file = tool.replaceInfo(file, page.user);
         var logTable = tool.listUserLog(sid);
         file = tool.replaceInfo(file, page.user);
         file = file.replace(BASIC_INFO, page.basicInfo);

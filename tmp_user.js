@@ -9,7 +9,7 @@ var User = {
 
     user.changeInfo = function(newUser) {
       if (user.group == '1' && newUser.sid != user.sid) return 'denied';
-      var tmp = tool.insertInfo(newUser);
+      var tmp = db.insertInfo(newUser);
       user = db.getUserInfo(user.sid);
       return tmp;
     };
