@@ -7,6 +7,77 @@ var db = require('./dbopt');
 
 var pages = {};
 var tmpPage = cls_page.tmpPage();
+var wtf = require('async').waterfall;
+var resPage = {
+  login: function() {
+    wtf([
+      function(cb) {tmpPage.loginPage(cb);},
+      function(file, cb) {tool.htmlRespond([], file); cb('','');}
+    ], function(err, rlt) {});
+  },
+  
+  index: function(sid) {
+    wtf([
+      function(cb) {pages[sid].index(cb);},
+      function(file, cb) {tool.htmlRespond(['sid=' + sid, 'Max-Age=-1'], file); cb('','');}
+    ], function(err, rlt) {});
+  },
+  
+  info: function(sid, vid) {
+    wtf([
+      function(cb) {pages[sid].infoPage(vid, cb);},
+      function(file, cb) {tool.htmlRespond([], file); cb('','');}
+    ], function(err, rlt) {});
+  },
+
+  suc: function(sid, url) {
+    wtf([
+      function(cb) {pages[sid].sucPage(url, cb);},
+      function(file, cb) {tool.htmlRespond([], file); cb('','');}
+    ], function(err, rlt) {});
+  },
+
+  fld: function(sid, url) {
+    wtf([
+      function(cb) {pages[sid].fldPage(url, cb);},
+      function(file, cb) {tool.htmlRespond([], file); cb('','');}
+    ], function(err, rlt) {});
+  },
+
+  log: function(sid) {
+    wtf([
+      function(cb) {pages[sid].logPage(cb);},
+      function(file, cb) {tool.htmlRespond([], file); cb('','');}
+    ], function(err, rlt) {});
+  },
+
+  ulog: function(sid, vid) {
+    wtf([
+      function(cb) {pages[sid].userLog(vid, cb);},
+      function(file, cb) {tool.htmlRespond([], file); cb('','');}
+    ], function(err, rlt) {});
+  },
+};
+
+var resStr = {
+  str: function(str) {
+    tool.stringRespond(str);
+  },
+  
+  start: function(sid, st_time, checkCode) {
+    wtf([
+      function(cb) {pages[sid].user.workStart(st_time, checkCode, cb);},
+      function(rlt, cb) {tool.stringRespond(rlt);}
+    ], function(err, rlt) {});
+  },
+
+  end: function(sid, ed_time, log, checkCode) {
+    wtf([
+      function(cb) {pages[sid].user.workEnd(ed_time, log, checkCode, cb);},
+      function(rlt, cb) {tool.stringRespond(rlt);}
+    ], function(err, rlt) {});
+  },
+};
 
 function signIn(req, res, cookies) {
   tool.fetchPostData(req, function(data) {
@@ -14,12 +85,13 @@ function signIn(req, res, cookies) {
     var psw = data.psw;
     db.check(sid, psw, function(rlt, grp) {
       if (!rlt) {
-        tool.htmlRespond([], tmpPage.loginPage());
+        resPage.login();
         return;
       }
       var tmp = cls_user.newUser(sid, grp);
+      tmp.getCode();
       pages[sid] = cls_page.newPage(tmp);
-      tool.htmlRespond(['sid=' + sid, 'Max-Age=-1'], pages[sid].index());
+      resPage.index(sid);
       return;
     });
   });
@@ -28,94 +100,94 @@ function signIn(req, res, cookies) {
 function index(req, res, cookies) {
   var sid = cookies.sid;
   if (sid == undefined || pages[sid] == undefined || pages[sid] == '') {
-    tool.htmlRespond([], tmpPage.loginPage());
+    resPage.login();
     return;
   }
-  tool.htmlRespond([], page[sid].index());
+  resPage.index(sid);
 }
 
 function infoPage(req, res, cookies) {
   var sid = cookies.sid;
   if (sid == undefined || pages[sid] == undefined || pages[sid] == '') {
-    tool.htmlRespond([], tmpPage.loginPage());
+    resPage.login();
     return;
   }
   var query = url.parse(req.url).query;
   var sid = query.sid;
-  tool.htmlRespond([], page[cookies.sid].infoPage(sid));
+  resPage.info(cookies.sid, sid);
 }
 
 function chgInfo(req, res, cookies) {
   var sid = cookies.sid;
   if (sid == undefined || pages[sid] == undefined || pages[sid] == '') {
-    tool.htmlRespond([], tmpPage.loginPage());
+    resPage.login();
     return;
   }
   var tmpUser = tool.fetchPostData(req);
   if (page[sid].user.changeInfo(tmpUser)) {
-    tool.htmlRespond([], page[sid].sucPage('/home'));
+    resPage.suc('/home');
   } else {
-    tool.htmlRespond([], page[sid].fldPage('/home'));
+    resPage.fld('/home');
   }
 }
 
 function signOut(req, res, cookies) {
   var sid = cookies.sid;
   if (sid == undefined || pages[sid] == undefined || pages[sid] == '') {
-    tool.htmlRespond([], tmpPage.loginPage());
+    resPage.login();
     return;
   }
   pages[sid] = '';
-  tool.htmlRespond([], tmpPage.loginPage());
+  resPage.login();
 }
 
 function addTA(req, res, cookies) {
   var sid = cookies.sid;
   if (sid == undefined || pages[sid] == undefined || pages[sid] == '') {
-    tool.htmlRespond([], tmpPage.loginPage());
+    resPage.login();
     return;
   }
   if (pages[sid].user.group == '1') {
-    tool.htmlRespond([], pages[sid].index());
+    resPage.index(sid);
     return;
   }
   var tmpUser = tool.fetchPostData(req);
   if (tool.addTA(tmpUser)) {
-    tool.htmlRespond([], page[sid].sucPage('/home'));
+    resPage.suc('/home');
   } else {
-    tool.htmlRespond([], page[sid].fldPage('/home'));
+    resPage.fld('/home');
   }
 }
 
 function deleteTA(req, res, cookies) {
   var sid = cookies.sid;
   if (sid == undefined || pages[sid] == undefined || pages[sid] == '') {
-    tool.htmlRespond([], tmpPage.loginPage());
+    resPage.login();
     return;
   }
   if (pages[sid].user.group == '1') {
-    tool.htmlRespond([], pages[sid].index());
+    resPage.index(sid);
     return;
   }
   var info = tool.fetchPostData(req);
   if (tool.deleteTA(info.sid)) {
     pages[info.sid] = '';
-    tool.htmlRespond([], page[sid].sucPage('/home'));
+    resPage.suc('/home');
   } else {
-    tool.htmlRespond([], page[sid].fldPage('/home'));
+    resPage.fld('/home');
   }
 }
 
 function workStart(req, res, cookies) {
   var sid = cookies.sid;
   if (sid == undefined || pages[sid] == undefined || pages[sid] == '') {
-    tool.stringRespond('illegal');
+    resStr.str('illegal');
     return;
   }
   tool.fetchPostData(req, function(data) {
     var st_time = data.st_time;
     var checkCode = data.checkCode;
-    tool.stringRespond(pages[sid].user.workStart(st_time, checkCode));
+    resStr.start(sid, st_time, checkCode);
     return;
   });
 }
@@ -123,14 +195,14 @@ function workStart(req, res, cookies) {
 function workEnd(req, res, cookies) {
   var sid = cookies.sid;
   if (sid == undefined || pages[sid] == undefined || pages[sid] == '') {
-    tool.stringRespond('illegal');
+    resStr.str('illegal');
     return;
   }
   tool.fetchPostData(req, function(data) {
     var ed_time = data.ed_time;
     var checkCode = data.checkCode;
     var log = data.log;
-    tool.stringRespond(pages[sid].user.workEnd(ed_time, log, checkCode));
+    resStr.end(sid, ed_time, log, checkCode);
     return;
   });
 }
@@ -138,39 +210,44 @@ function workEnd(req, res, cookies) {
 function logPage(req, res, cookies) {
   var sid = cookies.sid;
   if (sid == undefined || pages[sid] == undefined || pages[sid] == '') {
-    tool.stringRespond('illegal');
+    resPage.login();
+    return;
+  }
+  if (pages[sid].user.group == '1') {
+    resPage.index(sid);
     return;
   }
   var query = url.parse(req.url).query;
   var ed_time = new Date(query.ed_time);
   pages[sid].user.refreshUndoList();
   pages[sid].user.handleLog(ed_time);
-  tool.htmlRespond([], page[sid].logPage(ed_time));
+  resPage.log(sid);
+  return;
 }
 
 function handleLog(req, res, cookies) {
   var sid = cookies.sid;
   if (sid == undefined || pages[sid] == undefined || pages[sid] == '') {
-    tool.htmlRespond([], tmpPage.loginPage());
+    resPage.login();
     return;
   }
   if (pages[sid].user.group == '1') {
-    tool.htmlRespond([], pages[sid].index());
+    resPage.index(sid);
     return;
   }
   pages[sid].user.markAllDone();
-  tool.htmlRespond([], page[sid].sucPage('/home'));
+  resPage.suc('/home');
 }
 
 function userLog(req, res, cookies) {
   var sid = cookies.sid;
   if (sid == undefined || pages[sid] == undefined || pages[sid] == '') {
-    tool.htmlRespond([], tmpPage.loginPage());
+    resPage.login();
     return;
   }
   var query = url.parse(req.url).query;
   var sid = query.sid;
-  tool.htmlRespond([], page[cookies.sid].userLog(sid));
+  resPage.ulog(cookies.sid, sid);
 }
 
 exports.index = index();

@@ -8,7 +8,7 @@ var User = {
     var user = db.getUserInfo(sid);
 
     user.changeInfo = function(newUser) {
-      if (user.group == '1' && newUser.sid != user.sid) return 'denied';
+      if (user.group == '1' && newUser.sid != user.sid) callback('error', 'denied');
       var tmp = db.insertInfo(newUser);
       user = db.getUserInfo(user.sid);
       return tmp;
@@ -21,40 +21,47 @@ var User = {
 var Ta = {
   createNew: function(sid) {
     var ta = User.createNew(sid);
-    ta.checkCode = tool.getCheckCode();
     ta.st_time = '';
     ta.lastLog = '';
+    ta.checkCode = '';
     ta.handle = [];
 
-    ta.workStart = function(st_time, checkCode) {
+    ta.workStart = function(st_time, checkCode, callback) {
       if (checkCode == ta.checkCode) {
         if (ta.st_time != '') console.log(ta.sid +
                                           ': last time not finish -- ' +
                                           ta.st_time);
         ta.st_time = st_time;
-        return 'started';
+        callback('', 'started');
       } else {
-        return 'wrong code';
+        callback('error', 'wrong code');
       }
     };
 
-    ta.workEnd = function(ed_time, log, checkCode) {
+    ta.workEnd = function(ed_time, log, checkCode, callback) {
       if (checkCode == ta.checkCode) {
         log.hour = tool.transToHour(ed_time - ta.st_time);
         ta.st_time = '';
         ta.lastLog = log;
         db.insertLog(log);
-        return 'ended';
+        callback('', 'ended');
       } else {
-        return 'wrong code';
+        callback('error', 'wrong code');
       }
     };
 
     ta.refreshLogs = function() {
-      ta.logs = db.listUserLogs();
-      return;
+      db.listUserLogs(function(err, logs) {
+        ta.logs = logs;
+      });
     };
-
+    
+    ta.getCode = function() {
+      tool.getCheckCode(function(err, checkcode) {
+        ta.checkCode = checkcode;
+      });
+    }
+    
     return ta;
   }
 };
@@ -66,8 +73,9 @@ var Admin = {
     admin.handle = [];
 
     admin.refreshUndoList = function() {
-      admin.undoList = db.listAllUndoLog();
-      return;
+      db.listAllUndoLog(function(list) {
+        admin.undoList = list;
+      });
     };
 
     admin.handleLog = function(ed_time) {

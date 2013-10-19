@@ -19,25 +19,25 @@ var Page = {
     var page.user = user;
     var page.basicInfo = tool.formBasicInfo(user);
 
-    page.loginPage = function() {
+    page.loginPage = function(callback) {
       fs.readFile('./static/loginPage.html', 'utf-8', function(err, file) {
-        if (err) return '404 not found';
-        callback(file);
+        if (err) callback('error', "404 not found!");
+        callback('', file);
       });
     };
 
-    page.index = function() {
+    page.index = function(callback) {
       if (page.user.group == 1) {
         fs.readFile('./static/workPage.html', 'utf-8', function(err, file) {
-          if (err) return '404 not found';
+          if (err) callback('error', "404 not found!");
           file = tool.replaceInfo(file, page.user);
           file = file.replace(BASIC_INFO, page.basicInfo);
-          return file;
+          callback('', file);
         });
       } else {
         fs.readFile('./static/adminPage.html', 'utf-8', function(err, file) {
-          if (err) return '404 not found';
-          if (page.user.group != '2') return 'not admin';
+          if (err) callback('error', "404 not found!");
+          if (page.user.group != '2') callback('error', "not admin");
           db.getAllInfo(function(err, allInfo) {
             var item = '';
             for (i = 0; i < allInfo.length; i++) {
@@ -48,64 +48,65 @@ var Page = {
             file = tool.replaceInfo(file, page.user);
             file = file.replace(BASIC_INFO, page.basicInfo);
             file = file.replace(TA_INFO, item);
-            return file;
+            callback('', file);
           });
         });
       }
     };
 
-    page.infoPage = function(sid) {
+    page.infoPage = function(sid, callback) {
       fs.readFile('./static/infoPage.html', 'utf-8', function(err, file) {
-        if (err) return '404 not found';
+        if (err) callback('error', "404 not found!");
         if (page.user.group != '2') {
-          if (sid != page.user.sid) return 'not admin';
+          if (sid != page.user.sid) callback('error', "not admin");
         }
         file = tool.replaceInfo(file, page.user);
         file = tool.replaceExample(file, sid);
-        return file;
+        callback('', file);
       });
     };
 
-    page.logPage = function() {
+    page.logPage = function(callback) {
       fs.readFile('./static/logPage.html', 'utf-8', function(err, file) {
-        if (err) return '404 not found';
-        if (page.user.group != '2') return 'not admin';
+        if (err) callback('error', "404 not found!");
+        if (page.user.group != '2') callback('error', "not admin");
         var logTable = tool.formLogTable(page.user.handle);
         file = tool.replaceInfo(file, page.user);
         file = file.replace(BASIC_INFO, page.basicInfo);
         file = file.replace(LOG_TABLE, logTable);
-        return file;
+        callback('', file);
       });
     };
 
-    page.userLog = function(sid) {
+    page.userLog = function(sid, callback) {
       fs.readFile('./static/userLog.html', 'utf-8', function(err, file) {
-        if (err) return '404 not found';
+        if (err) callback('error', "404 not found!");
         if (page.user.group != '2') {
-          if (sid != page.user.sid) return 'not admin';
+          if (sid != page.user.sid) callback('error', "not admin");
         }
         var logTable = tool.listUserLog(sid);
         file = tool.replaceInfo(file, page.user);
         file = file.replace(BASIC_INFO, page.basicInfo);
         file = file.replace(LOG_TABLE, logTable);
+        callback('', file);
       });
     };
 
-    page.sucPage = function(url) {
+    page.sucPage = function(url, callback) {
       fs.readFile('./static/jumpOut.html', 'utf-8', function(err, file) {
-        if (err) return '404 not found';
+        if (err) callback('error', "404 not found!");
         file = file.replace('WAIT_FOR_REPLACE', '操作成功！');
         file = file.replace('url_example', url);
-        return file;
+        callback('', file);
       });
     };
 
-    page.fldPage = function(url) {
+    page.fldPage = function(url, callback) {
       fs.readFile('./static/jumpOut.html', 'utf-8', function(err, file) {
-        if (err) return '404 not found';
+        if (err) callback('error', "404 not found!");
         file = file.replace('WAIT_FOR_REPLACE', '操作成功！');
         file = file.replace('url_example', url);
-        return file;
+        callback('', file);
       });
     };
 
