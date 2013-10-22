@@ -60,4 +60,48 @@ function stringRespond(buffer) {
 }
 
 function replaceAll(file, info, place) {
+  return file.replace(new RegExp(place, 'gm'), info);
+}
+
+function formBasicInfo(user) {
+  var item = ""; 
+  item += "<tr>";
+  item +=   "<td style='width:30%;'>姓名</td>";
+  item +=   "<td style='width:70%;'>" + user["name"] + "</td>";
+  item += "</tr>";
+  item += "<tr>";
+  item +=   "<td style='width:30%;'>专业</td>";
+  item +=   "<td style='width:70%;'>" + user["major"] + "</td>";
+  item += "</tr>";
+  item += "<tr>";
+  item +=   "<td style='width:30%;'>电话</td>";
+  item +=   "<td style='width:70%;'>" + user["phone"] + "</td>";
+  item += "</tr>";
+  item += "<tr>";
+  item +=   "<td style='width:30%;'>Email</td>";
+  item +=   "<td style='width:70%;'>" + user["email"] + "</td>";
+  item += "</tr>";
+  return item;
+}
+
+function transToHour(ms) {
+  return (ms / 1000) / 3600;
+}
+
+function getCheckCode(callback) {
+  require('crypto').randomBytes(16, function(ex, buf) {  
+    callback(1, buf.toString('hex'));  
+  });
+}
+
+function fetchPostData(req, callback) {
+  var postData = "";
+  req.setEncoding("utf8");
+  req.addListener("data",function(postDataChunk){
+    postData += postDataChunk;
+  });
+  req.addListener("end",function(postDataCHunk){
+    var data = queryString.parse(postData);
+    callback(data);
+  });
 }

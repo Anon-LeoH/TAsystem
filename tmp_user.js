@@ -1,20 +1,35 @@
 var path = require('path');
 var fs = require('fs');
+var wtf = require('async').waterfall;
 var tool = require('./tool');
 var db = require('./dbopt');
 
 var User = {
   createNew: function(sid) {
-    var user = db.getUserInfo(sid);
+	var user = {
+	  name: '',
+	  psw: '',
+	  'sid': sid,
+	  group: 1,
+	  major: '',
+	  email: '',
+	  phone: ''
+	};
+    db.getUserInfo(sid, function(rlt) {
 
-    user.changeInfo = function(newUser) {
-      if (user.group == '1' && newUser.sid != user.sid) callback('error', 'denied');
-      var tmp = db.insertInfo(newUser);
-      user = db.getUserInfo(user.sid);
-      return tmp;
-    };
-
-    return user;
+      user.changeInfo = function(newUser) {
+        if (user.group == '1' && newUser.sid != user.sid) callback('error', 'denied');
+        var tmp = db.insertInfo(newUser);
+        return tmp;
+      };
+	  user.name = rlt.name;
+	  user.group = rlt.group;
+	  user.psw = rlt.psw;
+	  user.major = rlt.major;
+	  user.email = rlt.email;
+	  user.phone = rlt.phone;
+	});
+	return user;
   }
 };
 
@@ -89,7 +104,7 @@ var Admin = {
 
     admin.markAllDone = function() {
       for (i = 0; i < admin.handle.length; i++) {
-        admin.handle[i].done = '1';
+        db.handle(admin.handle[i]._id);
       }
       admin.refreshUndoList();
       admin.handle = [];

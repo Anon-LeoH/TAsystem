@@ -151,12 +151,13 @@ function addTA(req, res, cookies) {
     resPage.index(sid);
     return;
   }
-  var tmpUser = tool.fetchPostData(req);
-  if (tool.addTA(tmpUser)) {
-    resPage.suc('/home');
-  } else {
-    resPage.fld('/home');
-  }
+  tool.fetchPostData(req, function(tmpUser) {
+    if (db.addTA(tmpUser)) {
+      resPage.suc('/home');
+    } else {
+      resPage.fld('/home');
+    }
+  });
 }
 
 function deleteTA(req, res, cookies) {
@@ -169,13 +170,14 @@ function deleteTA(req, res, cookies) {
     resPage.index(sid);
     return;
   }
-  var info = tool.fetchPostData(req);
-  if (tool.deleteTA(info.sid)) {
-    pages[info.sid] = '';
-    resPage.suc('/home');
-  } else {
-    resPage.fld('/home');
-  }
+  tool.fetchPostData(req, function(tmpUser) {
+    if (db.deleteTA(info.sid)) {
+      pages[info.sid] = '';
+      resPage.suc('/home');
+    } else {
+      resPage.fld('/home');
+    }
+  });
 }
 
 function workStart(req, res, cookies) {
