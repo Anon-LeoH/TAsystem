@@ -22,7 +22,7 @@ var eg = {
   major: 'major_example',
   phone: 'phone_example',
   email: 'email_example',
-  group: 'group_example' 
+  group: 'group_example', 
 };
 
 function replaceInfo(file, user) {

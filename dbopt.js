@@ -29,7 +29,7 @@ function login_check(sid,psw,callback){
   });
 }
 
-function addLog(log,callback){
+function insertLog(log,callback){
   db.collection("logs",function(err,collection) {
     if (err) console.log("error when open collection:" + err);
     collection.insert({ "date": log['date'],
@@ -51,7 +51,7 @@ function addLog(log,callback){
   });
 }
 
-function addUser(user,callback){
+function addTA(user,callback){
   db.collection("users",function(err,collection) {
     if (err) console.log("error when open collection:" + err);
     collection.insert({  "name": user['name'],
@@ -71,7 +71,7 @@ function addUser(user,callback){
   });
 }
 
-function deleteUser(sid,callback){
+function deleteTA(sid,callback){
   db.collection("users",function(err,collection) {
     if (err) console.log("error when open collection:" + err);
     collection.remove({"sid":sid, },function(err,res){

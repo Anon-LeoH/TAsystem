@@ -43,21 +43,25 @@
         <div class="col-md-6" id="mainContent">
           <h3>日志信息</h3>
           <p>-----------------------</p>
-          WAIT_FOR_SEARCH_BAR_REPLACE
+		  <form action='/logPage'>
+			  <label>截止日期：</label>
+			  <input type='date' name='ed_time' placeholder='请选择截至日期'></input>
+			  <button type='submit' class='btn btn-primary'>搜索</button>
+		  </form>
 		  <p>-------------------------</p>
 		  <table class="table table-hover table-condensed">
 		    <thead>
 		      <tr>
-			    <th>#值班人</th>
-			    <th>#日期</th>
-			    <th>#开始时间</th>
-			    <th>#结束时间</th>
-			    <th>#时长</th>
-			    <th>#操作</th>
+			    <th>值班人</th>
+			    <th>日期</th>
+			    <th>开始时间</th>
+			    <th>结束时间</th>
+			    <th>时长</th>
+			    <th>操作</th>
 			  </tr>
 			</thead>
 			<tbody>
-			  log_example
+			  WAIT_FOR_LOG_TABLE_REPLACE
 			</tbody>
 		  </table>
         </div>
@@ -65,36 +69,6 @@
         </div>
       </div>
     </div>
-
-	<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-            <h4 class="modal-title">日志信息</h4>
-          </div>
-          <div class="modal-body">
-            <h5>值班人：</h5>
-			<p id="sid">sid_example</p>
-			<h5>值班日期：</h5>
-			<p id="date">date_example</p>
-			<h5>开始时间：</h5>
-			<p id="st">st_example</p>
-			<h5>结束时间：</h5>
-			<p id="ed">ed_example</p>
-			<h5>总时长：</h5>
-			<p id="hour">hour_example</p>
-			<h5>课室：</h5>
-			<p id="cls">cls_example</p>
-			<h5>日志：</h5>
-			<p id="log">log_example</p>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-          </div>
-        </div><!-- /.modal-content -->
-      </div><!-- /.modal-dialog -->
-    </div><!-- /.modal --> 
 
     <script type="text/javascript" src="http://code.jquery.com/jquery-latest.js"></script>    
     <script type="text/javascript" src="../bootstrap/js/bootstrap.min.js" ></script>

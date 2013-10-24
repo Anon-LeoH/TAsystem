@@ -220,8 +220,11 @@ function logPage(req, res, cookies) {
     return;
   }
   var query = url.parse(req.url).query;
-  var ed_time = new Date(query.ed_time);
+  var ed_time = new Date();
   pages[sid].user.refreshUndoList();
+  if (query != '') {
+	ed_time = new Date(parseInt(query.ed_time));
+  }
   pages[sid].user.handleLog(ed_time);
   resPage.log(sid);
   return;

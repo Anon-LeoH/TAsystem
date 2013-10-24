@@ -15,13 +15,12 @@ var User = {
 	  email: '',
 	  phone: ''
 	};
+    user.changeInfo = function(newUser) {
+      if (user.group == '1' && newUser.sid != user.sid) callback('error', 'denied');
+      var tmp = db.insertInfo(newUser);
+      return tmp;
+    };
     db.getUserInfo(sid, function(rlt) {
-
-      user.changeInfo = function(newUser) {
-        if (user.group == '1' && newUser.sid != user.sid) callback('error', 'denied');
-        var tmp = db.insertInfo(newUser);
-        return tmp;
-      };
 	  user.name = rlt.name;
 	  user.group = rlt.group;
 	  user.psw = rlt.psw;
