@@ -4,9 +4,11 @@ var http = require("http");
 var url = require("url");
 var router = require("./router");
 var dbopt = require("./dbopt");
+var user = require("./User");
 
 dbopt.startdb();
 router.init();
+user.userInit();
 http.createServer(function onRequest(request, response) {
     router.route(request,response);
 }

@@ -1,6 +1,6 @@
 var path = require('path');
 var url = require('url');
-var querystring = require('querystring');
+var queryString = require('querystring');
 var cls_page = require('./Page');
 var cls_user = require('./User');
 var db = require('./dbopt');
@@ -47,14 +47,14 @@ function replaceExample(file, user) {
   return file;
 }
 
-function htmlRespond(cookie, file) {
+function htmlRespond(res, cookie, file) {
   res.writeHead(200, {"Set-Cookie": cookie,
 			          "Content-Type": "text/html"});
   res.write(file, "utf-8");
   res.end();
 }
 
-function stringRespond(buffer) {
+function stringRespond(res, buffer) {
   res.writeHead(200, {"Content-Type": "text/plain"});
   res.end(buffer);
 }
@@ -105,3 +105,45 @@ function fetchPostData(req, callback) {
     callback(data);
   });
 }
+
+function formTAInfo(TAinfo) {
+  var item = '<tr>';
+  item += '<td>' + TAinfo.sid + '</td>';
+  item += '<td>' + TAinfo.name + '</td>';
+  item += '<td>';
+  if (TAinfo.group == 1) item += '助理';
+  else item += '管理员';
+  item += '</td>';
+  item += "<td><a href='/infoPage?sid=" + TAinfo.sid +
+	      "'><button class='btn btn-small btn-primary'>修改</button></a>" +
+		  "<a href='/deleteTA?sid=" + TAinfo.sid +
+		  "'><button class='btn btn-small btn-danger'>删除</button></a></td></tr>";
+  return item;
+}
+
+function formLogTable(logs) {
+  var item = '';
+  for (i = 0; i < logs.length; i++)
+  {
+    item += '<tr>';
+	item += '<td>' + logs[i].name + '</td>';
+	item += '<td>' + logs[i].date + '</td>';
+	item += '<td>' + logs[i].hour + '</td>';
+	item += '<td>' + "<a href='/deleteLog?id=" + logs[i]._id +
+		    "'><button class='btn btn-small btn-danger'>删除</button></a>";
+	item += '</td></tr>'
+  }
+  return item;
+}
+
+exports.replaceInfo = replaceInfo;
+exports.replaceExample = replaceExample;
+exports.htmlRespond = htmlRespond;
+exports.stringRespond = stringRespond;
+exports.formBasicInfo = formBasicInfo;
+exports.transToHour = transToHour;
+exports.getCheckCode = getCheckCode;
+exports.fetchPostData = fetchPostData;
+exports.formTAInfo = formTAInfo;
+exports.formLogTable = formLogTable;
+

@@ -4,30 +4,33 @@ var wtf = require('async').waterfall;
 var tool = require('./tool');
 var db = require('./dbopt');
 
+var userInfo = {};
+
+function userInit() {
+  db.getAllInfo(function(err, res) {
+    for(i = 0; i < res.length; i++) {
+	  userInfo[res[i].sid] = res[i];
+	}
+  });
+}
+
 var User = {
   createNew: function(sid) {
-	var user = {
-	  name: '',
-	  psw: '',
-	  'sid': sid,
-	  group: 1,
-	  major: '',
-	  email: '',
-	  phone: ''
-	};
-    user.changeInfo = function(newUser) {
-      if (user.group == '1' && newUser.sid != user.sid) callback('error', 'denied');
+	var user = userInfo[sid];
+
+	user.changeInfo = function(newUser) {
+      if (user.group == '1' && newUser.sid != user.sid) return 'denied';
       var tmp = db.insertInfo(newUser);
+	  if (newUser.sid == user.sid) {
+        user.psw = newUser.psw;
+        user.name = newUser.name;
+        user.major = newUser.major;
+        user.email = newUser.email;
+        user.phone = newUser.phone;
+	  }
       return tmp;
     };
-    db.getUserInfo(sid, function(rlt) {
-	  user.name = rlt.name;
-	  user.group = rlt.group;
-	  user.psw = rlt.psw;
-	  user.major = rlt.major;
-	  user.email = rlt.email;
-	  user.phone = rlt.phone;
-	});
+
 	return user;
   }
 };
@@ -38,7 +41,7 @@ var Ta = {
     ta.st_time = '';
     ta.lastLog = '';
     ta.checkCode = '';
-    ta.handle = [];
+    ta.logs = [];
 
     ta.workStart = function(st_time, checkCode, callback) {
       if (checkCode == ta.checkCode) {
@@ -119,5 +122,11 @@ function newUser(sid, grp) {
   return Admin.createNew(sid);
 }
 
-exports.newUser = newUser;
+function getUserInfo(sid) {
+  console.log(sid);
+  return userInfo[sid];
+}
 
+exports.newUser = newUser;
+exports.userInit = userInit;
+exports.getUserInfo = getUserInfo;

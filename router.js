@@ -1,12 +1,8 @@
 var path = require("path");
 var fs = require("fs");
-var page = require("./page");
-var preload = require("./preload");
 var url = require("url");
-var admin = require("./admin");
-var work = require("./work")
-var sign = require("./sign");
 var fileserver = require("./fileserver");
+var userOption = require("./userOption");
 var handle = {};
 var count = 0;
 
@@ -28,14 +24,19 @@ function init() {
 }
 
 function route(request,response) {
-    // needs cookies parse
-    pathname = url.parse(request.url).pathname;
-    if (typeof handle[pathname] === 'function') {
-            handle[pathname](request,response);
-    }
-    else{
-        fileserver.handle(pathname,response);
-    }
+  pathname = url.parse(request.url).pathname;
+  query = url.parse(request.url).query;
+  var Cookies = {};
+  request.headers.cookie && request.headers.cookie.split(';').forEach(function(Cookie) {
+    var parts = Cookie.split('=');
+    Cookies[parts[0].trim()] = (parts[1]||'').trim();
+  });
+  if (typeof handle[pathname] === 'function') {
+    handle[pathname](request,response,Cookies);
+  }
+  else {
+    fileserver.handle(pathname,response);
+  }
 }
 
 exports.route = route;

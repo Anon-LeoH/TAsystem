@@ -1,80 +1,81 @@
 var path = require('path');
 var url = require('url');
-var querystring = require('querystring');
+var queryString = require('querystring');
 var cls_page = require('./Page');
 var cls_user = require('./User');
+var tool = require('./tool');
 var db = require('./dbopt');
 
 var pages = {};
 var tmpPage = cls_page.tmpPage();
 var wtf = require('async').waterfall;
 var resPage = {
-  login: function() {
+  login: function(res) {
     wtf([
       function(cb) {tmpPage.loginPage(cb);},
-      function(file, cb) {tool.htmlRespond([], file); cb('','');}
+      function(file, cb) {tool.htmlRespond(res, [], file); cb('','');}
     ], function(err, rlt) {});
   },
   
-  index: function(sid) {
+  index: function(res, sid) {
     wtf([
       function(cb) {pages[sid].index(cb);},
-      function(file, cb) {tool.htmlRespond(['sid=' + sid, 'Max-Age=-1'], file); cb('','');}
+      function(file, cb) {tool.htmlRespond(res, ['sid=' + sid, 'Max-Age=-1'], file); cb('','');}
     ], function(err, rlt) {});
   },
   
-  info: function(sid, vid) {
+  info: function(res, sid, vid) {
     wtf([
       function(cb) {pages[sid].infoPage(vid, cb);},
-      function(file, cb) {tool.htmlRespond([], file); cb('','');}
+      function(file, cb) {tool.htmlRespond(res, [], file); cb('','');}
     ], function(err, rlt) {});
   },
 
-  suc: function(sid, url) {
+  suc: function(res, sid, url) {
     wtf([
       function(cb) {pages[sid].sucPage(url, cb);},
-      function(file, cb) {tool.htmlRespond([], file); cb('','');}
+      function(file, cb) {tool.htmlRespond(res, [], file); cb('','');}
     ], function(err, rlt) {});
   },
 
-  fld: function(sid, url) {
+  fld: function(res, sid, url) {
     wtf([
       function(cb) {pages[sid].fldPage(url, cb);},
-      function(file, cb) {tool.htmlRespond([], file); cb('','');}
+      function(file, cb) {tool.htmlRespond(res, [], file); cb('','');}
     ], function(err, rlt) {});
   },
 
-  log: function(sid) {
+  log: function(res, sid) {
     wtf([
       function(cb) {pages[sid].logPage(cb);},
-      function(file, cb) {tool.htmlRespond([], file); cb('','');}
+      function(file, cb) {tool.htmlRespond(res, [], file); cb('','');}
     ], function(err, rlt) {});
   },
 
-  ulog: function(sid, vid) {
+  ulog: function(res, sid, vid) {
     wtf([
       function(cb) {pages[sid].userLog(vid, cb);},
-      function(file, cb) {tool.htmlRespond([], file); cb('','');}
+      function(file, cb) {tool.htmlRespond(res, [], file); cb('','');}
     ], function(err, rlt) {});
   },
 };
 
 var resStr = {
-  str: function(str) {
-    tool.stringRespond(str);
+  str: function(res, str) {
+    tool.stringRespond(res, str);
   },
   
-  start: function(sid, st_time, checkCode) {
+  start: function(res, sid, st_time, checkCode) {
     wtf([
       function(cb) {pages[sid].user.workStart(st_time, checkCode, cb);},
-      function(rlt, cb) {tool.stringRespond(rlt);}
+      function(rlt, cb) {tool.stringRespond(res, rlt);}
     ], function(err, rlt) {});
   },
 
-  end: function(sid, ed_time, log, checkCode) {
+  end: function(res, sid, ed_time, log, checkCode) {
     wtf([
       function(cb) {pages[sid].user.workEnd(ed_time, log, checkCode, cb);},
-      function(rlt, cb) {tool.stringRespond(rlt);}
+      function(rlt, cb) {tool.stringRespond(res, rlt);}
     ], function(err, rlt) {});
   },
 };
@@ -85,13 +86,13 @@ function signIn(req, res, cookies) {
     var psw = data.psw;
     db.check(sid, psw, function(rlt, grp) {
       if (!rlt) {
-        resPage.login();
+        resPage.login(res);
         return;
       }
       var tmp = cls_user.newUser(sid, grp);
-      tmp.getCode();
+      if (grp == 1) tmp.getCode();
       pages[sid] = cls_page.newPage(tmp);
-      resPage.index(sid);
+      resPage.index(res, sid);
       return;
     });
   });
@@ -100,96 +101,102 @@ function signIn(req, res, cookies) {
 function index(req, res, cookies) {
   var sid = cookies.sid;
   if (sid == undefined || pages[sid] == undefined || pages[sid] == '') {
-    resPage.login();
+    resPage.login(res);
     return;
   }
-  resPage.index(sid);
+  resPage.index(res, sid);
 }
 
 function infoPage(req, res, cookies) {
   var sid = cookies.sid;
   if (sid == undefined || pages[sid] == undefined || pages[sid] == '') {
-    resPage.login();
+    resPage.login(res);
     return;
   }
   var query = url.parse(req.url).query;
+  query = queryString.parse(query);
   var sid = query.sid;
-  resPage.info(cookies.sid, sid);
+  resPage.info(res, cookies.sid, sid);
 }
 
 function chgInfo(req, res, cookies) {
   var sid = cookies.sid;
   if (sid == undefined || pages[sid] == undefined || pages[sid] == '') {
-    resPage.login();
+    resPage.login(res);
     return;
   }
-  var tmpUser = tool.fetchPostData(req);
-  if (page[sid].user.changeInfo(tmpUser)) {
-    resPage.suc('/home');
-  } else {
-    resPage.fld('/home');
-  }
+  tool.fetchPostData(req, function(tmpUser){
+    if (pages[sid].user.changeInfo(tmpUser)) {
+      resPage.suc(res, sid, '/home');
+    } else {
+      resPage.fld(res, sid, '/home');
+    }
+	cls_user.userInit();
+	pages[sid].basicInfo = tool.formBasicInfo(pages[sid].user);
+  });
 }
 
 function signOut(req, res, cookies) {
   var sid = cookies.sid;
   if (sid == undefined || pages[sid] == undefined || pages[sid] == '') {
-    resPage.login();
+    resPage.login(res);
     return;
   }
   pages[sid] = '';
-  resPage.login();
+  resPage.login(res);
 }
 
 function addTA(req, res, cookies) {
   var sid = cookies.sid;
   if (sid == undefined || pages[sid] == undefined || pages[sid] == '') {
-    resPage.login();
+    resPage.login(res);
     return;
   }
   if (pages[sid].user.group == '1') {
-    resPage.index(sid);
+    resPage.index(res, sid);
     return;
   }
   tool.fetchPostData(req, function(tmpUser) {
     if (db.addTA(tmpUser)) {
-      resPage.suc('/home');
+      resPage.suc(res, sid, '/home');
     } else {
-      resPage.fld('/home');
+      resPage.fld(res, sid, '/home');
     }
   });
+  cls_user.userInit();
 }
 
 function deleteTA(req, res, cookies) {
   var sid = cookies.sid;
   if (sid == undefined || pages[sid] == undefined || pages[sid] == '') {
-    resPage.login();
+    resPage.login(res);
     return;
   }
   if (pages[sid].user.group == '1') {
-    resPage.index(sid);
+    resPage.index(res, sid);
     return;
   }
   tool.fetchPostData(req, function(tmpUser) {
     if (db.deleteTA(info.sid)) {
       pages[info.sid] = '';
-      resPage.suc('/home');
+      resPage.suc(res, sid, '/home');
     } else {
-      resPage.fld('/home');
+      resPage.fld(res, sid, '/home');
     }
   });
+  cls_user.userInit();
 }
 
 function workStart(req, res, cookies) {
   var sid = cookies.sid;
   if (sid == undefined || pages[sid] == undefined || pages[sid] == '') {
-    resStr.str('illegal');
+    resStr.str(res, 'illegal');
     return;
   }
   tool.fetchPostData(req, function(data) {
     var st_time = data.st_time;
     var checkCode = data.checkCode;
-    resStr.start(sid, st_time, checkCode);
+    resStr.start(res, sid, st_time, checkCode);
     return;
   });
 }
@@ -197,14 +204,14 @@ function workStart(req, res, cookies) {
 function workEnd(req, res, cookies) {
   var sid = cookies.sid;
   if (sid == undefined || pages[sid] == undefined || pages[sid] == '') {
-    resStr.str('illegal');
+    resStr.str(res, 'illegal');
     return;
   }
   tool.fetchPostData(req, function(data) {
     var ed_time = data.ed_time;
     var checkCode = data.checkCode;
     var log = data.log;
-    resStr.end(sid, ed_time, log, checkCode);
+    resStr.end(res, sid, ed_time, log, checkCode);
     return;
   });
 }
@@ -212,50 +219,52 @@ function workEnd(req, res, cookies) {
 function logPage(req, res, cookies) {
   var sid = cookies.sid;
   if (sid == undefined || pages[sid] == undefined || pages[sid] == '') {
-    resPage.login();
+    resPage.login(res);
     return;
   }
   if (pages[sid].user.group == '1') {
-    resPage.index(sid);
+    resPage.index(res, sid);
     return;
   }
   var query = url.parse(req.url).query;
+  query = queryString.parse(query);
   var ed_time = new Date();
   pages[sid].user.refreshUndoList();
   if (query != '') {
 	ed_time = new Date(parseInt(query.ed_time));
   }
   pages[sid].user.handleLog(ed_time);
-  resPage.log(sid);
+  resPage.log(res, sid);
   return;
 }
 
 function handleLog(req, res, cookies) {
   var sid = cookies.sid;
   if (sid == undefined || pages[sid] == undefined || pages[sid] == '') {
-    resPage.login();
+    resPage.login(res);
     return;
   }
   if (pages[sid].user.group == '1') {
-    resPage.index(sid);
+    resPage.index(res, sid);
     return;
   }
   pages[sid].user.markAllDone();
-  resPage.suc('/home');
+  resPage.suc(res, sid, '/home');
 }
 
 function userLog(req, res, cookies) {
   var sid = cookies.sid;
   if (sid == undefined || pages[sid] == undefined || pages[sid] == '') {
-    resPage.login();
+    resPage.login(res);
     return;
   }
   var query = url.parse(req.url).query;
+  query = queryString.parse(query);
   var sid = query.sid;
-  resPage.ulog(cookies.sid, sid);
+  resPage.ulog(res, cookies.sid, sid);
 }
 
-exports.index = index();
+exports.index = index;
 exports.signIn = signIn;
 exports.signOut = signOut;
 exports.infoPage = infoPage;

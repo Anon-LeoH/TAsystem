@@ -2,6 +2,7 @@ var path = require('path');
 var fs = require('fs');
 var tool = require('./tool');
 var db = require('./dbopt');
+var cls_user = require('./User');
 
 /* this js file declare class Page
  * the functions of Page is return
@@ -16,8 +17,8 @@ var Page = {
     var LOG_TABLE = 'WAIT_FOR_LOG_TABLE_REPLACE';
 
     var page = {};
-    var page.user = user;
-    var page.basicInfo = tool.formBasicInfo(user);
+    page.user = user;
+    page.basicInfo = tool.formBasicInfo(user);
 
     page.loginPage = function(callback) {
       fs.readFile('./static/loginPage.html', 'utf-8', function(err, file) {
@@ -61,9 +62,10 @@ var Page = {
           if (sid != page.user.sid) callback('error', "not admin");
         }
         file = tool.replaceInfo(file, page.user);
-        file = tool.replaceExample(file, sid);
+		var tmpUser = cls_user.getUserInfo(sid);
+        file = tool.replaceExample(file, tmpUser);
         callback('', file);
-      });
+	  });
     };
 
     page.logPage = function(callback) {
@@ -84,7 +86,8 @@ var Page = {
         if (page.user.group != '2') {
           if (sid != page.user.sid) callback('error', "not admin");
         }
-        var logTable = tool.listUserLog(sid);
+		page.user.refreshLogs();
+        var logTable = tool.formLogTable(page.user.logs);
         file = tool.replaceInfo(file, page.user);
         file = file.replace(BASIC_INFO, page.basicInfo);
         file = file.replace(LOG_TABLE, logTable);
@@ -118,5 +121,17 @@ function newPage(user) {
     return Page.createNew(user);
 }
 
+function tmpPage() {
+  var tmppage = {};
+  tmppage.loginPage = function(callback) {
+    fs.readFile('./static/loginPage.html', 'utf-8', function(err, file) {
+      if (err) callback('error', "404 not found!");
+      callback('', file);
+    });
+  };
+  return tmppage;
+}
+
 exports.newPage = newPage;
+exports.tmpPage = tmpPage;
 

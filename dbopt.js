@@ -15,7 +15,7 @@ function startdb() {
     });
 };
 
-function login_check(sid,psw,callback){
+function check(sid,psw,callback){
   db.collection("users",function(err,collection) {
     if (err) console.log("error when open collection" + err)
     else collection.findOne({'sid': sid, 'psw': psw, },function(err,res){
@@ -32,22 +32,25 @@ function login_check(sid,psw,callback){
 function insertLog(log,callback){
   db.collection("logs",function(err,collection) {
     if (err) console.log("error when open collection:" + err);
-    collection.insert({ "date": log['date'],
-                        "sid": log['sid'],
-                        "cls": log['cls'],
-                        "st_time": log['st_time'],
-                        "ed_time": log['ed_time'],
-                        "hour": log['hour'],
-                        "log": log['log'],
-                        "handled": 0},
-                        function(err,res){
-                          if (!err) callback(1);
-                          else {
-                            console.log("error occur when insert:" + err);
-                            callback(0);
-                          }
-                        }
-    });
+	db.getUserInfo(log.sid, function(res) {
+      collection.insert({ "date": log['date'],
+		                  "name": res.name,
+                          "sid": log['sid'],
+                          "cls": log['cls'],
+                          "st_time": log['st_time'],
+                          "ed_time": log['ed_time'],
+                          "hour": log['hour'],
+                          "log": log['log'],
+                          "handled": 0},
+                          function(err,res){
+                            if (!err) callback(1);
+                            else {
+                              console.log("error occur when insert:" + err);
+                              callback(0);
+                            }
+	                      
+      });
+	});
   });
 }
 
@@ -66,7 +69,6 @@ function addTA(user,callback){
                              console.log("error occur when insert:" + err);
                              callback(0);
                            }
-                         }
     });
   });
 }
@@ -91,6 +93,8 @@ function getAllInfo(callback) {
 }
 
 function insertInfo(user) {
+  console.log("chgInfo: ");
+  console.log(user);
   db.collection("users", function(err, collection) {
     if (err) console.log("error when open collection:" + err);
 	collection.update({sid: user.sid}, {$set: {
@@ -99,18 +103,9 @@ function insertInfo(user) {
 	  major: user.major,
 	  phone: user.phone,
 	  email: user.email
-	}});
+	}}, function(err){});
   });
   return 1;
-}
-
-function getUserInfo(sid, callback) {
-  db.collection("users", function(err, collection) {
-    if (err) console.log("error when open collection:" + err);
-	collection.findOne({'sid': sid}, function(err, res) {
-	  callback(res)
-	});
-  });
 }
 
 function listUserLogs(sid, callback) {
@@ -137,3 +132,15 @@ function handle(id) {
 	collection.update({'_id': id}, {$set: {handled: 1}});
   });
 }
+
+exports.startdb = startdb;
+exports.check = check;
+exports.insertLog = insertLog;
+exports.addTA = addTA;
+exports.deleteTA = deleteTA;
+exports.getAllInfo = getAllInfo;
+exports.insertInfo = insertInfo;
+exports.listUserLogs = listUserLogs;
+exports.listAllUndoLog = listAllUndoLog;
+exports.handle = handle;
+
