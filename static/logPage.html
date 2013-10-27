@@ -43,7 +43,7 @@
         <div class="col-md-6" id="mainContent">
           <h3>日志信息</h3>
           <p>-----------------------</p>
-		  <form action='/logPage'>
+		  <form action='/logPage' method='get'>
 			  <label>截止日期：</label>
 			  <input type='date' name='ed_time' placeholder='请选择截至日期'></input>
 			  <button type='submit' class='btn btn-primary'>搜索</button>
@@ -53,15 +53,16 @@
 		    <thead>
 		      <tr>
 			    <th>值班人</th>
+			    <th>课室</th>
 			    <th>日期</th>
 			    <th>时长</th>
-			    <th>操作</th>
 			  </tr>
 			</thead>
 			<tbody>
 			  WAIT_FOR_LOG_TABLE_REPLACE
 			</tbody>
 		  </table>
+		  <a href='/handleLog'><button class='btn btn-success'>处理全部日志</button></a>
         </div>
         <div class="col-md-2" id="placeHolder">
         </div>

@@ -18,7 +18,7 @@ db.open(function(err,db){
                 collection.insert({"sid":"10000001",
                                    "name":"管理员",
                                    "psw":"root123456",
-                                   "group":"admin",
+                                   "group":2,
                                    "major":"软件学院",
                                    "phone":"10086",
                                    "email":"aaa@bbb.com"}, //初始化test信息
@@ -30,7 +30,7 @@ db.open(function(err,db){
                 collection.insert({"sid":"10000002",
                                    "name":"普通用户",
                                    "psw":"user123456",
-                                   "group":"user",
+                                   "group":1,
                                    "major":"软件学院",
                                    "phone":"10000",
                                    "email":"ccc@ddd.com"}, //初始化test信息
@@ -53,8 +53,9 @@ db.open(function(err,db){
                 collection.insert({"name":"管理员",
                                    "sid":"10000001",
                                    "cls":"B401",
-                                   "st_time":new Date().getTime(),
-                                   "ed_time":new Date().getTime(),
+                                   "st_time":new Date('2000-01-01').getTime(),
+                                   "ed_time":new Date('2000-01-01').getTime(),
+					               "date": "2000-01-01",
                                    "hour":"0.0",
 					               "handled":0,
                                    "log":"今天很不高兴",}, //初始化test信息

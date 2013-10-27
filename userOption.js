@@ -65,9 +65,9 @@ var resStr = {
     tool.stringRespond(res, str);
   },
   
-  start: function(res, sid, st_time, checkCode) {
+  start: function(res, sid, st_time) {
     wtf([
-      function(cb) {pages[sid].user.workStart(st_time, checkCode, cb);},
+      function(cb) {pages[sid].user.workStart(st_time, cb);},
       function(rlt, cb) {tool.stringRespond(res, rlt);}
     ], function(err, rlt) {});
   },
@@ -90,7 +90,6 @@ function signIn(req, res, cookies) {
         return;
       }
       var tmp = cls_user.newUser(sid, grp);
-      if (grp == 1) tmp.getCode();
       pages[sid] = cls_page.newPage(tmp);
       resPage.index(res, sid);
       return;
@@ -176,14 +175,15 @@ function deleteTA(req, res, cookies) {
     resPage.index(res, sid);
     return;
   }
-  tool.fetchPostData(req, function(tmpUser) {
-    if (db.deleteTA(info.sid)) {
-      pages[info.sid] = '';
-      resPage.suc(res, sid, '/home');
-    } else {
-      resPage.fld(res, sid, '/home');
-    }
-  });
+  var query = url.parse(req.url).query;
+  query = queryString.parse(query);
+  var dsid = query.sid;
+  if (db.deleteTA(dsid)) {
+    pages[dsid] = '';
+    resPage.suc(res, sid, '/home');
+  } else {
+    resPage.fld(res, sid, '/home');
+  }
   cls_user.userInit();
 }
 
@@ -194,9 +194,12 @@ function workStart(req, res, cookies) {
     return;
   }
   tool.fetchPostData(req, function(data) {
-    var st_time = data.st_time;
-    var checkCode = data.checkCode;
-    resStr.start(res, sid, st_time, checkCode);
+	if (data.st_time == undefined) {
+	  tool.strRespond(res, 'failed');
+	  return;
+	}
+    var st_time = parseInt(data.st_time);
+    resStr.start(res, sid, st_time);
     return;
   });
 }
@@ -210,7 +213,7 @@ function workEnd(req, res, cookies) {
   tool.fetchPostData(req, function(data) {
     var ed_time = data.ed_time;
     var checkCode = data.checkCode;
-    var log = data.log;
+    var log = data;
     resStr.end(res, sid, ed_time, log, checkCode);
     return;
   });
@@ -230,8 +233,8 @@ function logPage(req, res, cookies) {
   query = queryString.parse(query);
   var ed_time = new Date();
   pages[sid].user.refreshUndoList();
-  if (query != '') {
-	ed_time = new Date(parseInt(query.ed_time));
+  if (query.ed_time != undefined) {
+	ed_time = new Date(query.ed_time);
   }
   pages[sid].user.handleLog(ed_time);
   resPage.log(res, sid);

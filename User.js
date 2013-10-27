@@ -43,27 +43,30 @@ var Ta = {
     ta.checkCode = '';
     ta.logs = [];
 
-    ta.workStart = function(st_time, checkCode, callback) {
-      if (checkCode == ta.checkCode) {
-        if (ta.st_time != '') console.log(ta.sid +
-                                          ': last time not finish -- ' +
-                                          ta.st_time);
-        ta.st_time = st_time;
-        callback('', 'started');
-      } else {
-        callback('error', 'wrong code');
-      }
+    ta.workStart = function(st_time, callback) {
+      if (ta.st_time != '') console.log(ta.sid +
+                                        ': last time not finish -- ' +
+                                        ta.st_time);
+      ta.st_time = st_time;
+      callback(null, ta.checkCode);
     };
 
     ta.workEnd = function(ed_time, log, checkCode, callback) {
+	  if (ta.st_time == '') {
+		callback('', 'failed');
+		return;
+	  }
       if (checkCode == ta.checkCode) {
         log.hour = tool.transToHour(ed_time - ta.st_time);
+		log.sid = ta.sid;
+		log.name = ta.name;
         ta.st_time = '';
         ta.lastLog = log;
         db.insertLog(log);
+		ta.getCode();
         callback('', 'ended');
       } else {
-        callback('error', 'wrong code');
+        callback('error', 'failed');
       }
     };
 
@@ -78,7 +81,7 @@ var Ta = {
         ta.checkCode = checkcode;
       });
     }
-    
+    ta.getCode();
     return ta;
   }
 };
@@ -96,8 +99,9 @@ var Admin = {
     };
 
     admin.handleLog = function(ed_time) {
+	  admin.handle = [];
       for (i = 0; i < admin.undoList.length; i++) {
-        if (parseInt(admin.undoList[i].st_time) <= ed_time.parse()) {
+        if (parseInt(admin.undoList[i].st_time) <= ed_time.getTime()) {
           admin.handle.push(admin.undoList[i]);
         }
       }
@@ -113,6 +117,7 @@ var Admin = {
       return;
     };
 
+	admin.refreshUndoList();
     return admin;
   }
 };
@@ -123,7 +128,6 @@ function newUser(sid, grp) {
 }
 
 function getUserInfo(sid) {
-  console.log(sid);
   return userInfo[sid];
 }
 

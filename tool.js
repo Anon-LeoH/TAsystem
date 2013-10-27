@@ -127,11 +127,10 @@ function formLogTable(logs) {
   {
     item += '<tr>';
 	item += '<td>' + logs[i].name + '</td>';
+	item += '<td>' + logs[i].cls + '</td>';
 	item += '<td>' + logs[i].date + '</td>';
 	item += '<td>' + logs[i].hour + '</td>';
-	item += '<td>' + "<a href='/deleteLog?id=" + logs[i]._id +
-		    "'><button class='btn btn-small btn-danger'>删除</button></a>";
-	item += '</td></tr>'
+	item += '</tr>'
   }
   return item;
 }

@@ -59,7 +59,10 @@ var Page = {
       fs.readFile('./static/infoPage.html', 'utf-8', function(err, file) {
         if (err) callback('error', "404 not found!");
         if (page.user.group != '2') {
-          if (sid != page.user.sid) callback('error', "not admin");
+          if (sid != page.user.sid) {
+			  callback('error', "not admin");
+		      return;
+		  }
         }
         file = tool.replaceInfo(file, page.user);
 		var tmpUser = cls_user.getUserInfo(sid);

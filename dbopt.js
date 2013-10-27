@@ -29,57 +29,48 @@ function check(sid,psw,callback){
   });
 }
 
-function insertLog(log,callback){
+function insertLog(log){
   db.collection("logs",function(err,collection) {
     if (err) console.log("error when open collection:" + err);
-	db.getUserInfo(log.sid, function(res) {
-      collection.insert({ "date": log['date'],
-		                  "name": res.name,
-                          "sid": log['sid'],
-                          "cls": log['cls'],
-                          "st_time": log['st_time'],
-                          "ed_time": log['ed_time'],
-                          "hour": log['hour'],
-                          "log": log['log'],
-                          "handled": 0},
-                          function(err,res){
-                            if (!err) callback(1);
-                            else {
-                              console.log("error occur when insert:" + err);
-                              callback(0);
-                            }
-	                      
-      });
-	});
+    collection.insert({ "date": log['date'],
+		                "name": log['name'],
+                        "sid": log['sid'],
+                        "cls": log['cls'],
+                        "st_time": log['st_time'],
+                        "ed_time": log['ed_time'],
+                        "hour": log['hour'],
+                        "log": log['log'],
+                        "handled": 0},
+                        function(err,res){
+                          if (err) {
+                            console.log("error occur when insert:" + err);
+                          }
+    });
   });
 }
 
-function addTA(user,callback){
+function addTA(user){
   db.collection("users",function(err,collection) {
     if (err) console.log("error when open collection:" + err);
-    collection.insert({  "name": user['name'],
+    collection.insert({  "sid": user.sid,
+		                 "name": user['name'],
                          "psw": user['psw'],
                          "group": user['group'],
                          "major": user['major'],
                          "phone": user['phone'],
                          "email": user['email'],},
                          function(err,res){
-                           if (!err) callback(1);
-                           else {
+                           if (err) {
                              console.log("error occur when insert:" + err);
-                             callback(0);
                            }
     });
   });
 }
 
-function deleteTA(sid,callback){
+function deleteTA(sid){
   db.collection("users",function(err,collection) {
     if (err) console.log("error when open collection:" + err);
-    collection.remove({"sid":sid, },function(err,res){
-      if(!err) callback(1);
-      else callback(0);
-    });
+    collection.remove({"sid":sid, },function(err,res){});
   });
 }
 
@@ -93,8 +84,6 @@ function getAllInfo(callback) {
 }
 
 function insertInfo(user) {
-  console.log("chgInfo: ");
-  console.log(user);
   db.collection("users", function(err, collection) {
     if (err) console.log("error when open collection:" + err);
 	collection.update({sid: user.sid}, {$set: {
@@ -117,7 +106,7 @@ function listUserLogs(sid, callback) {
   });
 }
 
-function listAllUndoLog(sid, callback) {
+function listAllUndoLog(callback) {
   db.collection("logs", function(err, collection) {
     if (err) console.log("error when open collection:" + err);
 	collection.find({'handled': 0}).toArray(function(err, res) {
@@ -129,7 +118,7 @@ function listAllUndoLog(sid, callback) {
 function handle(id) {
   db.collection("logs", function(err, collection) {
     if (err) console.log("error when open collection:" + err);
-	collection.update({'_id': id}, {$set: {handled: 1}});
+	collection.update({'_id': id}, {$set: {handled: 1}}, function(err){});
   });
 }
 
