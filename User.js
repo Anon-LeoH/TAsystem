@@ -8,30 +8,30 @@ var userInfo = {};
 
 function userInit() {
   db.getAllInfo(function(err, res) {
-    for(i = 0; i < res.length; i++) {
-	  userInfo[res[i].sid] = res[i];
-	}
+    for (i = 0; i < res.length; i++) {
+      userInfo[res[i].sid] = res[i];
+    }
   });
 }
 
 var User = {
   createNew: function(sid) {
-	var user = userInfo[sid];
+    var user = userInfo[sid];
 
-	user.changeInfo = function(newUser) {
+    user.changeInfo = function(newUser) {
       if (user.group == '1' && newUser.sid != user.sid) return 'denied';
       var tmp = db.insertInfo(newUser);
-	  if (newUser.sid == user.sid) {
+      if (newUser.sid == user.sid) {
         user.psw = newUser.psw;
         user.name = newUser.name;
         user.major = newUser.major;
         user.email = newUser.email;
         user.phone = newUser.phone;
-	  }
+      }
       return tmp;
     };
 
-	return user;
+    return user;
   }
 };
 
@@ -52,18 +52,18 @@ var Ta = {
     };
 
     ta.workEnd = function(ed_time, log, checkCode, callback) {
-	  if (ta.st_time == '') {
-		callback('', 'failed');
-		return;
-	  }
+      if (ta.st_time == '') {
+        callback('', 'failed');
+        return;
+      }
       if (checkCode == ta.checkCode) {
         log.hour = tool.transToHour(ed_time - ta.st_time);
-		log.sid = ta.sid;
-		log.name = ta.name;
+        log.sid = ta.sid;
+        log.name = ta.name;
         ta.st_time = '';
         ta.lastLog = log;
         db.insertLog(log);
-		ta.getCode();
+        ta.getCode();
         callback('', 'ended');
       } else {
         callback('error', 'failed');
@@ -75,12 +75,12 @@ var Ta = {
         ta.logs = logs;
       });
     };
-    
+
     ta.getCode = function() {
       tool.getCheckCode(function(err, checkcode) {
         ta.checkCode = checkcode;
       });
-    }
+    };
     ta.getCode();
     return ta;
   }
@@ -99,7 +99,7 @@ var Admin = {
     };
 
     admin.handleLog = function(ed_time) {
-	  admin.handle = [];
+      admin.handle = [];
       for (i = 0; i < admin.undoList.length; i++) {
         if (parseInt(admin.undoList[i].st_time) <= ed_time.getTime()) {
           admin.handle.push(admin.undoList[i]);
@@ -117,7 +117,7 @@ var Admin = {
       return;
     };
 
-	admin.refreshUndoList();
+    admin.refreshUndoList();
     return admin;
   }
 };

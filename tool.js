@@ -12,7 +12,7 @@ var replace = {
   major: 'WAIT_FOR_MAJOR_REPLACE',
   phone: 'WAIT_FOR_PHONE_REPLACE',
   email: 'WAIT_FOR_EMAIL_REPLACE',
-  group: 'WAIT_FOR_GROUP_REPLACE' 
+  group: 'WAIT_FOR_GROUP_REPLACE'
 };
 
 var eg = {
@@ -22,7 +22,7 @@ var eg = {
   major: 'major_example',
   phone: 'phone_example',
   email: 'email_example',
-  group: 'group_example', 
+  group: 'group_example'
 };
 
 function replaceInfo(file, user) {
@@ -48,14 +48,14 @@ function replaceExample(file, user) {
 }
 
 function htmlRespond(res, cookie, file) {
-  res.writeHead(200, {"Set-Cookie": cookie,
-			          "Content-Type": "text/html"});
-  res.write(file, "utf-8");
+  res.writeHead(200, {'Set-Cookie': cookie,
+                      'Content-Type': 'text/html'});
+  res.write(file, 'utf-8');
   res.end();
 }
 
 function stringRespond(res, buffer) {
-  res.writeHead(200, {"Content-Type": "text/plain"});
+  res.writeHead(200, {'Content-Type': 'text/plain'});
   res.end(buffer);
 }
 
@@ -64,23 +64,23 @@ function replaceAll(file, info, place) {
 }
 
 function formBasicInfo(user) {
-  var item = ""; 
-  item += "<tr>";
-  item +=   "<td style='width:30%;'>姓名</td>";
-  item +=   "<td style='width:70%;'>" + user["name"] + "</td>";
-  item += "</tr>";
-  item += "<tr>";
-  item +=   "<td style='width:30%;'>专业</td>";
-  item +=   "<td style='width:70%;'>" + user["major"] + "</td>";
-  item += "</tr>";
-  item += "<tr>";
-  item +=   "<td style='width:30%;'>电话</td>";
-  item +=   "<td style='width:70%;'>" + user["phone"] + "</td>";
-  item += "</tr>";
-  item += "<tr>";
-  item +=   "<td style='width:30%;'>Email</td>";
-  item +=   "<td style='width:70%;'>" + user["email"] + "</td>";
-  item += "</tr>";
+  var item = '';
+  item += '<tr>';
+  item += "<td style='width:30%;'>姓名</td>";
+  item += "<td style='width:70%;'>" + user['name'] + '</td>';
+  item += '</tr>';
+  item += '<tr>';
+  item += "<td style='width:30%;'>专业</td>";
+  item += "<td style='width:70%;'>" + user['major'] + '</td>';
+  item += '</tr>';
+  item += '<tr>';
+  item += "<td style='width:30%;'>电话</td>";
+  item += "<td style='width:70%;'>" + user['phone'] + '</td>';
+  item += '</tr>';
+  item += '<tr>';
+  item += "<td style='width:30%;'>Email</td>";
+  item += "<td style='width:70%;'>" + user['email'] + '</td>';
+  item += '</tr>';
   return item;
 }
 
@@ -89,18 +89,18 @@ function transToHour(ms) {
 }
 
 function getCheckCode(callback) {
-  require('crypto').randomBytes(16, function(ex, buf) {  
-    callback(1, buf.toString('hex'));  
+  require('crypto').randomBytes(16, function(ex, buf) {
+    callback(1, buf.toString('hex'));
   });
 }
 
 function fetchPostData(req, callback) {
-  var postData = "";
-  req.setEncoding("utf8");
-  req.addListener("data",function(postDataChunk){
+  var postData = '';
+  req.setEncoding('utf8');
+  req.addListener('data', function(postDataChunk) {
     postData += postDataChunk;
   });
-  req.addListener("end",function(postDataCHunk){
+  req.addListener('end', function(postDataCHunk) {
     var data = queryString.parse(postData);
     callback(data);
   });
@@ -115,9 +115,10 @@ function formTAInfo(TAinfo) {
   else item += '管理员';
   item += '</td>';
   item += "<td><a href='/infoPage?sid=" + TAinfo.sid +
-	      "'><button class='btn btn-small btn-primary'>修改</button></a>" +
-		  "<a href='/deleteTA?sid=" + TAinfo.sid +
-		  "'><button class='btn btn-small btn-danger'>删除</button></a></td></tr>";
+          "'><button class='btn btn-small btn-primary'>修改</button></a>" +
+          "<a href='/deleteTA?sid=" + TAinfo.sid +
+          "'><button class='btn btn-small btn-danger'>删除" +
+          '</button></a></td></tr>';
   return item;
 }
 
@@ -126,11 +127,11 @@ function formLogTable(logs) {
   for (i = 0; i < logs.length; i++)
   {
     item += '<tr>';
-	item += '<td>' + logs[i].name + '</td>';
-	item += '<td>' + logs[i].cls + '</td>';
-	item += '<td>' + logs[i].date + '</td>';
-	item += '<td>' + logs[i].hour + '</td>';
-	item += '</tr>'
+    item += '<td>' + logs[i].name + '</td>';
+    item += '<td>' + logs[i].cls + '</td>';
+    item += '<td>' + logs[i].date + '</td>';
+    item += '<td>' + logs[i].hour + '</td>';
+    item += '</tr>';
   }
   return item;
 }

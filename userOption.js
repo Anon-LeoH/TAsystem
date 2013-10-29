@@ -13,58 +13,62 @@ var resPage = {
   login: function(res) {
     wtf([
       function(cb) {tmpPage.loginPage(cb);},
-      function(file, cb) {tool.htmlRespond(res, [], file); cb('','');}
+      function(file, cb) {tool.htmlRespond(res, [], file); cb('', '');}
     ], function(err, rlt) {});
   },
-  
+
   index: function(res, sid) {
     wtf([
       function(cb) {pages[sid].index(cb);},
-      function(file, cb) {tool.htmlRespond(res, ['sid=' + sid, 'Max-Age=-1'], file); cb('','');}
+      function(file, cb) {
+        tool.htmlRespond(res, ['sid=' + sid,
+                               'Max-Age=-1'], file);
+        cb('', '');
+      }
     ], function(err, rlt) {});
   },
-  
+
   info: function(res, sid, vid) {
     wtf([
       function(cb) {pages[sid].infoPage(vid, cb);},
-      function(file, cb) {tool.htmlRespond(res, [], file); cb('','');}
+      function(file, cb) {tool.htmlRespond(res, [], file); cb('', '');}
     ], function(err, rlt) {});
   },
 
   suc: function(res, sid, url) {
     wtf([
       function(cb) {pages[sid].sucPage(url, cb);},
-      function(file, cb) {tool.htmlRespond(res, [], file); cb('','');}
+      function(file, cb) {tool.htmlRespond(res, [], file); cb('', '');}
     ], function(err, rlt) {});
   },
 
   fld: function(res, sid, url) {
     wtf([
       function(cb) {pages[sid].fldPage(url, cb);},
-      function(file, cb) {tool.htmlRespond(res, [], file); cb('','');}
+      function(file, cb) {tool.htmlRespond(res, [], file); cb('', '');}
     ], function(err, rlt) {});
   },
 
   log: function(res, sid) {
     wtf([
       function(cb) {pages[sid].logPage(cb);},
-      function(file, cb) {tool.htmlRespond(res, [], file); cb('','');}
+      function(file, cb) {tool.htmlRespond(res, [], file); cb('', '');}
     ], function(err, rlt) {});
   },
 
   ulog: function(res, sid, vid) {
     wtf([
       function(cb) {pages[sid].userLog(vid, cb);},
-      function(file, cb) {tool.htmlRespond(res, [], file); cb('','');}
+      function(file, cb) {tool.htmlRespond(res, [], file); cb('', '');}
     ], function(err, rlt) {});
-  },
+  }
 };
 
 var resStr = {
   str: function(res, str) {
     tool.stringRespond(res, str);
   },
-  
+
   start: function(res, sid, st_time) {
     wtf([
       function(cb) {pages[sid].user.workStart(st_time, cb);},
@@ -77,7 +81,7 @@ var resStr = {
       function(cb) {pages[sid].user.workEnd(ed_time, log, checkCode, cb);},
       function(rlt, cb) {tool.stringRespond(res, rlt);}
     ], function(err, rlt) {});
-  },
+  }
 };
 
 function signIn(req, res, cookies) {
@@ -124,14 +128,14 @@ function chgInfo(req, res, cookies) {
     resPage.login(res);
     return;
   }
-  tool.fetchPostData(req, function(tmpUser){
+  tool.fetchPostData(req, function(tmpUser) {
     if (pages[sid].user.changeInfo(tmpUser)) {
       resPage.suc(res, sid, '/home');
     } else {
       resPage.fld(res, sid, '/home');
     }
-	cls_user.userInit();
-	pages[sid].basicInfo = tool.formBasicInfo(pages[sid].user);
+    cls_user.userInit();
+    pages[sid].basicInfo = tool.formBasicInfo(pages[sid].user);
   });
 }
 
@@ -194,10 +198,10 @@ function workStart(req, res, cookies) {
     return;
   }
   tool.fetchPostData(req, function(data) {
-	if (data.st_time == undefined) {
-	  tool.strRespond(res, 'failed');
-	  return;
-	}
+    if (data.st_time == undefined) {
+      tool.strRespond(res, 'failed');
+      return;
+    }
     var st_time = parseInt(data.st_time);
     resStr.start(res, sid, st_time);
     return;
@@ -234,7 +238,7 @@ function logPage(req, res, cookies) {
   var ed_time = new Date();
   pages[sid].user.refreshUndoList();
   if (query.ed_time != undefined) {
-	ed_time = new Date(query.ed_time);
+    ed_time = new Date(query.ed_time);
   }
   pages[sid].user.handleLog(ed_time);
   resPage.log(res, sid);
